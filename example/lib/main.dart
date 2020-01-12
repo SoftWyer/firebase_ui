@@ -74,19 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         showBar: true,
-        // horizontalPadding: 8,
+        horizontalPadding: 8,
         bottomPadding: 5,
         avoidBottomInset: true,
         color: Color(0x33363636),
         providers: [
           ProvidersTypes.google,
           ProvidersTypes.facebook,
-          ProvidersTypes.twitter,
           ProvidersTypes.email,
           ProvidersTypes.guest,
         ],
-        twitterConsumerKey: "",
-        twitterConsumerSecret: "", horizontalPadding: 12,
       );
     } else {
       return new HomeScreen(user: _currentUser);

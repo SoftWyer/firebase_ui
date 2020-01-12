@@ -43,7 +43,6 @@ class TranslationBundle {
   String get signInFacebook => parent?.signInFacebook;
   String get signInGoogle => parent?.signInGoogle;
   String get signInEmail => parent?.signInEmail;
-  String get signInTwitter => parent?.signInTwitter;
   String get signInGuest => parent?.signInGuest;
 
   String get errorOccurred => parent?.errorOccurred;
@@ -135,9 +134,6 @@ Connectez-vous avec $providerName pour continuer.''';
   String get signInEmail => r'Connexion avec email';
 
   @override
-  String get signInTwitter => r'Connexion avec Twitter';
-
-  @override
   String get signInGuest => r"Continuer en tant qu'invité";
 }
 
@@ -220,9 +216,6 @@ Sign in with $providerName to continue.''';
   String get signInEmail => r'Sign in with email';
 
   @override
-  String get signInTwitter => r'Sign in with Twitter';
-
-  @override
   String get signInGuest => r"Continue as a guest";
 }
 
@@ -303,9 +296,6 @@ Mit $providerName anmelden um fortzufarhen.''';
 
   @override
   String get signInEmail => r'Mit Email anmelden';
-
-  @override
-  String get signInTwitter => r'Mit Twitter anmelden';
 
   @override
   String get signInGuest => r"Als Gast fortfahren";
@@ -469,8 +459,6 @@ Entra con $providerName para continuar.''';
   @override
   String get signInEmail => r'Entrar con email';
 
-  @override
-  String get signInTwitter => r'Entrar con Twitter';
 }
   @override
   String get signInGuest => r"Continua como invitado";
