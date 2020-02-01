@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'email_view.dart';
@@ -65,25 +64,25 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  _handleFacebookSignin() async {
-    FacebookLoginResult result = await facebookLogin.logIn(['email']);
-    if (result.accessToken != null) {
-      try {
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
-        AuthResult authResult = await _auth.signInWithCredential(credential);
-        FirebaseUser user = authResult.user;
-        print(user);
-      } catch (e) {
-        showErrorDialog(context, e.details);
-      }
-    }
-  }
+  // _handleFacebookSignin() async {
+  //   FacebookLoginResult result = await facebookLogin.logIn(['email']);
+  //   if (result.accessToken != null) {
+  //     try {
+  //       AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
+  //       AuthResult authResult = await _auth.signInWithCredential(credential);
+  //       FirebaseUser user = authResult.user;
+  //       print(user);
+  //     } catch (e) {
+  //       showErrorDialog(context, e.details);
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     _buttons = {
-      ProvidersTypes.facebook:
-          providersDefinitions(context)[ProvidersTypes.facebook].copyWith(onSelected: _handleFacebookSignin),
+      // ProvidersTypes.facebook:
+      //     providersDefinitions(context)[ProvidersTypes.facebook].copyWith(onSelected: _handleFacebookSignin),
       ProvidersTypes.google:
           providersDefinitions(context)[ProvidersTypes.google].copyWith(onSelected: _handleGoogleSignIn),
       ProvidersTypes.email:
@@ -103,9 +102,10 @@ class _LoginViewState extends State<LoginView> {
 
   void _followProvider(String value) {
     ProvidersTypes provider = stringToProvidersType(value);
-    if (provider == ProvidersTypes.facebook) {
-      _handleFacebookSignin();
-    } else if (provider == ProvidersTypes.google) {
+    // if (provider == ProvidersTypes.facebook) {
+    //   _handleFacebookSignin();
+    // } else
+    if (provider == ProvidersTypes.google) {
       _handleGoogleSignIn();
     }
   }

@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui/l10n/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum ProvidersTypes { email, google, facebook, guest, phone }
 
 final GoogleSignIn googleSignIn = new GoogleSignIn();
-final FacebookLogin facebookLogin = new FacebookLogin();
+// final FacebookLogin facebookLogin = new FacebookLogin();
 
 ProvidersTypes stringToProvidersType(String value) {
   if (value.toLowerCase().contains('facebook')) return ProvidersTypes.facebook;
@@ -82,12 +81,12 @@ class ButtonDescription extends StatelessWidget {
 }
 
 Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
-      ProvidersTypes.facebook: new ButtonDescription(
-          color: const Color.fromRGBO(59, 87, 157, 1.0),
-          logo: "fb-logo.png",
-          label: FFULocalizations.of(context).signInFacebook,
-          name: "Facebook",
-          labelColor: Colors.white),
+      // ProvidersTypes.facebook: new ButtonDescription(
+      //     color: const Color.fromRGBO(59, 87, 157, 1.0),
+      //     logo: "fb-logo.png",
+      //     label: FFULocalizations.of(context).signInFacebook,
+      //     name: "Facebook",
+      //     labelColor: Colors.white),
       ProvidersTypes.google: new ButtonDescription(
           color: Colors.white,
           logo: "go-logo.png",
@@ -149,9 +148,9 @@ Future<void> signOutProviders() async {
 Future<dynamic> signOut(Iterable providers) async {
   return Future.forEach(providers, (p) async {
     switch (p.providerId) {
-      case 'facebook.com':
-        await facebookLogin.logOut();
-        break;
+      // case 'facebook.com':
+      //   await facebookLogin.logOut();
+      //   break;
       case 'google.com':
         await googleSignIn.signOut();
         break;
