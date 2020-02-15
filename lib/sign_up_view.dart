@@ -59,8 +59,7 @@ class _SignUpViewState extends State<SignUpView> {
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
                   onSubmitted: _submit,
-                  decoration: new InputDecoration(
-                      labelText: FFULocalizations.of(context).emailLabel),
+                  decoration: new InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                 ),
                 const SizedBox(height: 8.0),
                 new TextField(
@@ -70,8 +69,7 @@ class _SignUpViewState extends State<SignUpView> {
                   autocorrect: false,
                   onChanged: _checkValid,
                   onSubmitted: _submitDisplayName,
-                  decoration: new InputDecoration(
-                      labelText: FFULocalizations.of(context).nameLabel),
+                  decoration: new InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
                 ),
                 const SizedBox(height: 8.0),
                 new TextField(
@@ -80,8 +78,7 @@ class _SignUpViewState extends State<SignUpView> {
                   autocorrect: false,
                   onSubmitted: _submit,
                   focusNode: _focusPassword,
-                  decoration: new InputDecoration(
-                      labelText: FFULocalizations.of(context).passwordLabel),
+                  decoration: new InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
                 ),
                 !widget.passwordCheck
                     ? new Container()
@@ -89,9 +86,7 @@ class _SignUpViewState extends State<SignUpView> {
                         controller: _controllerCheckPassword,
                         obscureText: true,
                         autocorrect: false,
-                        decoration: new InputDecoration(
-                            labelText: FFULocalizations.of(context)
-                                .passwordCheckLabel),
+                        decoration: new InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
                       ),
               ],
             ),
@@ -125,8 +120,7 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   _connexion(BuildContext context) async {
-    if (widget.passwordCheck &&
-        _controllerPassword.text != _controllerCheckPassword.text) {
+    if (widget.passwordCheck && _controllerPassword.text != _controllerCheckPassword.text) {
       showErrorDialog(context, FFULocalizations.of(context).passwordCheckError);
       return;
     }
@@ -143,13 +137,17 @@ class _SignUpViewState extends State<SignUpView> {
         userUpdateInfo.displayName = _controllerDisplayName.text;
         await user.updateProfile(userUpdateInfo);
         Navigator.pop(context, true);
+
+        _auth.sendPasswordResetEmail(
+          email: _controllerEmail.text,
+        );
       } catch (e) {
         showErrorDialog(context, e.details);
       }
     } on PlatformException catch (e) {
       print(e.details);
       //TODO improve errors catching
-      String msg = FFULocalizations.of(context).passwordLengthMessage;
+      String msg = e.message;
       showErrorDialog(context, msg);
     }
   }
