@@ -107,10 +107,10 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context
           labelColor: Colors.white),
     };
 
-Future<Null> showErrorDialog(BuildContext context, String message, {String title}) {
+Future<Null> showErrorDialog(BuildContext context, String message, {String title, bool barrierDismissible = false}) {
   return showDialog<Null>(
     context: context,
-    barrierDismissible: false, // user must tap button!
+    barrierDismissible: barrierDismissible,
     builder: (BuildContext context) => new AlertDialog(
       title: title != null ? new Text(title) : null,
       content: new SingleChildScrollView(

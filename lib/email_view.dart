@@ -36,8 +36,7 @@ class _EmailViewState extends State<EmailView> {
                     onSubmitted: _submit,
                     keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
-                    decoration: new InputDecoration(
-                        labelText: FFULocalizations.of(context).emailLabel),
+                    decoration: new InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                   ),
                 ],
               ),
@@ -68,13 +67,11 @@ class _EmailViewState extends State<EmailView> {
   _connexion(BuildContext context) async {
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
-      List<String> providers =
-          await auth.fetchSignInMethodsForEmail(email: _controllerEmail.text);
+      List<String> providers = await auth.fetchSignInMethodsForEmail(email: _controllerEmail.text);
       print(providers);
 
       if (providers == null || providers.isEmpty) {
-        bool connected = await Navigator.of(context)
-            .push(new MaterialPageRoute<bool>(builder: (BuildContext context) {
+        bool connected = await Navigator.of(context).push(new MaterialPageRoute<bool>(builder: (BuildContext context) {
           return new SignUpView(_controllerEmail.text, widget.passwordCheck);
         }));
 
@@ -82,8 +79,7 @@ class _EmailViewState extends State<EmailView> {
           Navigator.pop(context);
         }
       } else if (providers.contains('password')) {
-        bool connected = await Navigator.of(context)
-            .push(new MaterialPageRoute<bool>(builder: (BuildContext context) {
+        bool connected = await Navigator.of(context).push(new MaterialPageRoute<bool>(builder: (BuildContext context) {
           return new PasswordView(_controllerEmail.text);
         }));
 
@@ -91,8 +87,7 @@ class _EmailViewState extends State<EmailView> {
           Navigator.pop(context);
         }
       } else {
-        String provider = await _showDialogSelectOtherProvider(
-            _controllerEmail.text, providers);
+        String provider = await _showDialogSelectOtherProvider(_controllerEmail.text, providers);
         if (provider.isNotEmpty) {
           Navigator.pop(context, provider);
         }
@@ -108,43 +103,42 @@ class _EmailViewState extends State<EmailView> {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) => new AlertDialog(
-            content: new SingleChildScrollView(
-                child: new ListBody(
+        content: new SingleChildScrollView(
+            child: new ListBody(
+          children: <Widget>[
+            new Text(FFULocalizations.of(context).allReadyEmailMessage(email, providerName)),
+            new SizedBox(
+              height: 16.0,
+            ),
+            new Column(
+              children: providers.map((String p) {
+                return new RaisedButton(
+                  child: new Row(
+                    children: <Widget>[
+                      new Text(_providerStringToButton(p)),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(p);
+                  },
+                );
+              }).toList(),
+            )
+          ],
+        )),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Row(
               children: <Widget>[
-                new Text(FFULocalizations.of(context)
-                    .allReadyEmailMessage(email, providerName)),
-                new SizedBox(
-                  height: 16.0,
-                ),
-                new Column(
-                  children: providers.map((String p) {
-                    return new RaisedButton(
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(_providerStringToButton(p)),
-                        ],
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(p);
-                      },
-                    );
-                  }).toList(),
-                )
+                new Text(FFULocalizations.of(context).cancelButtonLabel),
               ],
-            )),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Row(
-                  children: <Widget>[
-                    new Text(FFULocalizations.of(context).cancelButtonLabel),
-                  ],
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop('');
-                },
-              ),
-            ],
+            ),
+            onPressed: () {
+              Navigator.of(context).pop('');
+            },
           ),
+        ],
+      ),
     );
   }
 

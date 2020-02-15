@@ -28,6 +28,8 @@ class TranslationBundle {
 
   String get passwordInvalidMessage => parent?.passwordInvalidMessage;
 
+  String get checkEmailLink => parent?.checkEmailLink;
+
   String get recoverPasswordTitle => parent?.recoverPasswordTitle;
 
   String get recoverHelpLabel => parent?.recoverHelpLabel;
@@ -154,6 +156,9 @@ class _Bundle_en extends TranslationBundle {
   String get passwordCheckLabel => r'Confirm the password';
 
   @override
+  String get checkEmailLink => r'Check email for password reset link';
+
+  @override
   String get passwordCheckError => r'The two passwords are different';
 
   @override
@@ -234,6 +239,9 @@ class _Bundle_de extends TranslationBundle {
 
   @override
   String get passwordCheckLabel => r'Bestätigen Sie das Passwort';
+
+  @override
+  String get checkEmailLink => r'Check email for password reset link';
 
   @override
   String get passwordCheckError => r'Die zwei Passwörter sind unterschiedlich';
@@ -318,6 +326,9 @@ class _Bundle_pt extends TranslationBundle {
   String get passwordCheckLabel => r'Confirme a senha';
 
   @override
+  String get checkEmailLink => r'Check email for password reset link';
+
+  @override
   String get passwordCheckError => r'As senhas são diferentes';
 
   @override
@@ -396,6 +407,9 @@ class _Bundle_es extends TranslationBundle {
 
   @override
   String get passwordCheckLabel => r'Confirma la contraseña';
+
+  @override
+  String get checkEmailLink => r'Check email for password reset link';
 
   @override
   String get passwordCheckError => r'Las contraseñas no coinciden';
