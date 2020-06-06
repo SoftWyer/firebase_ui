@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-enum ProvidersTypes { email, google, facebook, guest, phone }
+enum ProvidersTypes { email, google, apple, facebook, guest, phone }
 
 final GoogleSignIn googleSignIn = new GoogleSignIn();
 // final FacebookLogin facebookLogin = new FacebookLogin();
@@ -13,6 +15,7 @@ final GoogleSignIn googleSignIn = new GoogleSignIn();
 ProvidersTypes stringToProvidersType(String value) {
   if (value.toLowerCase().contains('facebook')) return ProvidersTypes.facebook;
   if (value.toLowerCase().contains('google')) return ProvidersTypes.google;
+  if (value.toLowerCase().contains('apple')) return ProvidersTypes.apple;
   if (value.toLowerCase().contains('password')) return ProvidersTypes.email;
   if (value.toLowerCase().contains('guest')) return ProvidersTypes.guest;
 //TODO  if (value.toLowerCase().contains('phone')) return ProvidersTypes.phone;
@@ -66,7 +69,9 @@ class ButtonDescription extends StatelessWidget {
           children: <Widget>[
             new Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 32.0, 16.0),
-              child: icon != null ? Icon(icon, color: labelColor, size: 30 ) : Image.asset('assets/$logo', package: 'firebase_ui'),
+              child: icon != null
+                  ? Icon(icon, color: labelColor, size: 30)
+                  : Image.asset('assets/$logo', package: 'firebase_ui', height: 30),
             ),
             new Expanded(
               child: new Text(
@@ -92,6 +97,12 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context
           logo: "go-logo.png",
           label: FFULocalizations.of(context).signInGoogle,
           name: "Google",
+          labelColor: Colors.black54),
+      ProvidersTypes.apple: new ButtonDescription(
+          color: Colors.lightBlue,
+          logo: "apple.png",
+          label: FFULocalizations.of(context).signInApple,
+          name: "Apple",
           labelColor: Colors.black54),
       ProvidersTypes.email: new ButtonDescription(
           color: const Color.fromRGBO(219, 68, 55, 1.0),
@@ -156,4 +167,14 @@ Future<dynamic> signOut(Iterable providers) async {
         break;
     }
   });
+}
+
+///
+/// Class to generate a random Nonce of arbitrary length
+class Nonce {
+  static final Random _random = Random.secure();
+
+  static List<int> createCryptoRandomInt([int length = 32]) => List<int>.generate(length, (i) => _random.nextInt(256));
+
+  static String createCryptoRandomString([int length = 32]) => base64Url.encode(Nonce.createCryptoRandomInt(length));
 }

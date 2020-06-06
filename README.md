@@ -3,12 +3,19 @@
 [![Build Status](https://travis-ci.org/fidelisa/flutter_plugins.svg?branch=master)](https://travis-ci.org/fidelisa/flutter_plugins)
 [![pub package](https://img.shields.io/pub/v/firebase_ui.svg)](https://pub.dartlang.org/packages/firebase_ui)
 
-Fork of https://pub.dartlang.org/packages/flutter_firebase_ui
+SoftWyer fork of https://pub.dev/packages/firebase_ui based on a fork of https://pub.dartlang.org/packages/flutter_firebase_ui
 
-Old package wasn't being maintained so I created this one to update.
+SoftWyer changes include:
+ * Apple Sign-In
+ * Anonymous login
+ * Removal of Twitter (old)
+ * Removal of Facebook (old/broken)
+
+
+New fork of Old package wasn't being maintained :-/ so we created this one to update.
 
 firebase_ui is a library that helps you to quickly implement firebase authentication.
-It provides UI for the common identity providers like Facebook, Google, and email.
+It provides UI for the common identity providers like -Facebook-, Apple, Google and email.
 
 Note: this plugin use firebase_auth you must configure it as describe [here](https://pub.dartlang.org/packages/firebase_auth).
 

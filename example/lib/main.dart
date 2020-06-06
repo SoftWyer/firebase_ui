@@ -65,6 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     if (_currentUser == null) {
       return new SignInScreen(
+        config: {
+          AppleConfig.configName: AppleConfig(
+            'https://',
+            'funky.glitch.com',
+            'signinwithapple',
+            'callbacks/signin',
+            'com.about.you',
+          )
+        },
         title: "Demo",
         header: new Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -80,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Color(0x33363636),
         providers: [
           ProvidersTypes.google,
-          ProvidersTypes.facebook,
+          ProvidersTypes.apple,
           ProvidersTypes.email,
           ProvidersTypes.guest,
         ],
@@ -133,8 +142,7 @@ class HomeScreen extends StatelessWidget {
               new SizedBox(
                 height: 32.0,
               ),
-              new RaisedButton(
-                  child: new Text("DECONNEXION"), onPressed: _logout)
+              new RaisedButton(child: new Text("DECONNEXION"), onPressed: _logout)
             ],
           )));
 

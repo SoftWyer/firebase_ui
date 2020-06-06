@@ -1,7 +1,9 @@
 library firebase_ui;
 
 export 'utils.dart';
+export 'config.dart';
 
+import 'package:firebase_ui/config.dart';
 import 'package:flutter/material.dart';
 import 'login_view.dart';
 import 'utils.dart';
@@ -16,6 +18,7 @@ class SignInScreen extends StatefulWidget {
       this.providers,
       this.color = Colors.white,
       this.allowBackAction = true,
+      this.config,
       @required this.showBar,
       @required this.avoidBottomInset,
       @required this.bottomPadding,
@@ -34,6 +37,9 @@ class SignInScreen extends StatefulWidget {
   final double bottomPadding;
   final bool allowBackAction;
 
+  /// A [Map] containing configuration items for various sign-in clients
+  final Map<String, Config> config;
+
   @override
   _SignInScreenState createState() => new _SignInScreenState();
 }
@@ -44,8 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
-  List<ProvidersTypes> get _providers =>
-      widget.providers ?? [ProvidersTypes.email];
+  List<ProvidersTypes> get _providers => widget.providers ?? [ProvidersTypes.email];
 
   @override
   Widget build(BuildContext context) => new Scaffold(
@@ -67,12 +72,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   _header,
                   new Expanded(
                     child: new Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: widget.horizontalPadding),
+                        padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                         child: LoginView(
                           providers: _providers,
                           passwordCheck: _passwordCheck,
                           bottomPadding: widget.bottomPadding,
+                          config: widget.config,
                         )),
                   ),
                   _footer
