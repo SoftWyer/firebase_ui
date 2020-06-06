@@ -62,9 +62,9 @@ class _SignInScreenState extends State<SignInScreen> {
     if (Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
-      int v = int.tryParse(info.systemVersion) ?? 12;
+      double v = double.tryParse(info.utsname.version) ?? 1;
       if (v < 13) {
-        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is $v");
+        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
         validProviders.remove(ProvidersTypes.apple);
       }
     }
