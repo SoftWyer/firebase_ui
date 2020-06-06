@@ -1,12 +1,16 @@
 library firebase_ui;
 
-export 'utils.dart';
-export 'config.dart';
+import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:firebase_ui/config.dart';
 import 'package:flutter/material.dart';
+
 import 'login_view.dart';
 import 'utils.dart';
+
+export 'config.dart';
+export 'utils.dart';
 
 class SignInScreen extends StatefulWidget {
   SignInScreen(
@@ -45,12 +49,28 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Widget get _header => widget.header ?? new Container();
   Widget get _footer => widget.footer ?? new Container();
 
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
-  List<ProvidersTypes> get _providers => widget.providers ?? [ProvidersTypes.email];
+  Future<List<ProvidersTypes>> _providers() async {
+    List<ProvidersTypes> validProviders = List.from(widget?.providers ?? [ProvidersTypes.email]);
+
+    // Apple sign in is only available with iOS 13+, so we check
+    if (Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
+      // Check iOS version
+      IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
+      int v = int.tryParse(info.systemVersion) ?? 12;
+      if (v < 13) {
+        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is $v");
+        validProviders.remove(ProvidersTypes.apple);
+      }
+    }
+
+    return validProviders;
+  }
 
   @override
   Widget build(BuildContext context) => new Scaffold(
@@ -73,11 +93,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   new Expanded(
                     child: new Padding(
                         padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-                        child: LoginView(
-                          providers: _providers,
-                          passwordCheck: _passwordCheck,
-                          bottomPadding: widget.bottomPadding,
-                          config: widget.config,
+                        child: FutureBuilder<List<ProvidersTypes>>(
+                          future: _providers(),
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) => LoginView(
+                            providers: snapshot.data,
+                            passwordCheck: _passwordCheck,
+                            bottomPadding: widget.bottomPadding,
+                            config: widget.config,
+                          ),
                         )),
                   ),
                   _footer
