@@ -56,15 +56,18 @@ class _SignInScreenState extends State<SignInScreen> {
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
   Future<List<ProvidersTypes>> _providers() async {
-    List<ProvidersTypes> validProviders = List.from(widget?.providers ?? [ProvidersTypes.email]);
+    List<ProvidersTypes> validProviders =
+        List.from(widget?.providers ?? [ProvidersTypes.email]);
 
     // Apple sign in is only available with iOS 13+, so we check
     if (Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
-      double v = double.tryParse(info.utsname.version) ?? 1;
+      int v = int.tryParse(info.systemVersion.split(r'.')[0]);
+      print("iOS major version is $v");
       if (v < 13) {
-        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
+        print(
+            "Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
         validProviders.remove(ProvidersTypes.apple);
       }
     }
@@ -92,11 +95,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   _header,
                   new Expanded(
                     child: new Padding(
-                        padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: widget.horizontalPadding),
                         child: FutureBuilder<List<ProvidersTypes>>(
                           future: _providers(),
                           initialData: [],
-                          builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) => LoginView(
+                          builder: (context,
+                                  AsyncSnapshot<List<ProvidersTypes>>
+                                      snapshot) =>
+                              LoginView(
                             providers: snapshot.data,
                             passwordCheck: _passwordCheck,
                             bottomPadding: widget.bottomPadding,
