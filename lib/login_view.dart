@@ -185,14 +185,13 @@ class _LoginViewState extends State<LoginView> {
           providersDefinitions(context)[ProvidersTypes.guest].copyWith(onSelected: _handleGuestSignIn),
     };
 
-    return Container(
-        // padding: widget.padding,
-        child: SingleChildScrollView(
-      child: Column(
-          children: widget.providers.map((p) {
+    return ListView(
+      shrinkWrap: false,
+      primary: true,
+      children: widget.providers.map((p) {
         return Container(padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? new Container());
-      }).toList()),
-    ));
+      }).toList(),
+    );
   }
 
   void _followProvider(String value) {

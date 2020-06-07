@@ -56,8 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
   Future<List<ProvidersTypes>> _providers() async {
-    List<ProvidersTypes> validProviders =
-        List.from(widget?.providers ?? [ProvidersTypes.email]);
+    List<ProvidersTypes> validProviders = List.from(widget?.providers ?? [ProvidersTypes.email]);
 
     // Apple sign in is only available with iOS 13+, so we check
     if (Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
@@ -66,8 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
       int v = int.tryParse(info.systemVersion.split(r'.')[0]);
       print("iOS major version is $v");
       if (v < 13) {
-        print(
-            "Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
+        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
         validProviders.remove(ProvidersTypes.apple);
       }
     }
@@ -76,47 +74,42 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => new Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: widget.showBar
-          ? new AppBar(
-              title: new Text(widget.title),
+          ? AppBar(
+              title: Text(widget.title),
               elevation: 4.0,
               automaticallyImplyLeading: widget.allowBackAction,
             )
           : null,
       resizeToAvoidBottomInset: widget.avoidBottomInset,
-      body: new Builder(
+      body: Builder(
         builder: (BuildContext context) {
-          return new Container(
-              decoration: new BoxDecoration(color: widget.color),
-              child: SingleChildScrollView(
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    _header,
-                    Container(
+          return Container(
+              decoration: BoxDecoration(color: widget.color),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _header,
+                  Expanded(
+                    child: Container(
                       constraints: BoxConstraints(maxWidth: 300),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: widget.horizontalPadding),
-                      child: new Expanded(
-                        child: FutureBuilder<List<ProvidersTypes>>(
-                          future: _providers(),
-                          initialData: [],
-                          builder: (context,
-                                  AsyncSnapshot<List<ProvidersTypes>>
-                                      snapshot) =>
-                              LoginView(
-                            providers: snapshot.data,
-                            passwordCheck: _passwordCheck,
-                            bottomPadding: widget.bottomPadding,
-                            config: widget.config,
-                          ),
+                      padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+                      child: FutureBuilder<List<ProvidersTypes>>(
+                        future: _providers(),
+                        initialData: [],
+                        builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) => LoginView(
+                          providers: snapshot.data,
+                          passwordCheck: _passwordCheck,
+                          bottomPadding: widget.bottomPadding,
+                          config: widget.config,
                         ),
                       ),
                     ),
-                    _footer
-                  ],
-                ),
+                  ),
+                  _footer,
+                ],
               ));
         },
       ));
