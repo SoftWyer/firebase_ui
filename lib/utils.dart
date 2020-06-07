@@ -71,7 +71,8 @@ class ButtonDescription extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 32.0, 16.0),
               child: icon != null
                   ? Icon(icon, color: labelColor, size: 30)
-                  : Image.asset('assets/$logo', package: 'firebase_ui', height: 30),
+                  : Image.asset('assets/$logo',
+                      package: 'firebase_ui', height: 30),
             ),
             new Expanded(
               child: new Text(
@@ -85,7 +86,9 @@ class ButtonDescription extends StatelessWidget {
   }
 }
 
-Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
+Map<ProvidersTypes, ButtonDescription> providersDefinitions(
+        BuildContext context) =>
+    {
       // ProvidersTypes.facebook: new ButtonDescription(
       //     color: const Color.fromRGBO(59, 87, 157, 1.0),
       //     logo: "fb-logo.png",
@@ -93,17 +96,17 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context
       //     name: "Facebook",
       //     labelColor: Colors.white),
       ProvidersTypes.google: new ButtonDescription(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           logo: "go-logo.png",
           label: FFULocalizations.of(context).signInGoogle,
           name: "Google",
-          labelColor: Colors.black54),
+          labelColor: Colors.black87),
       ProvidersTypes.apple: new ButtonDescription(
-          color: Colors.lightBlue,
+          color: Colors.black,
           logo: "apple.png",
           label: FFULocalizations.of(context).signInApple,
           name: "Apple",
-          labelColor: Colors.black54),
+          labelColor: Colors.white),
       ProvidersTypes.email: new ButtonDescription(
           color: const Color.fromRGBO(219, 68, 55, 1.0),
           logo: "email-logo.png",
@@ -118,7 +121,8 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context
           labelColor: Colors.white),
     };
 
-Future<Null> showErrorDialog(BuildContext context, String message, {String title, bool barrierDismissible = false}) {
+Future<Null> showErrorDialog(BuildContext context, String message,
+    {String title, bool barrierDismissible = false}) {
   return showDialog<Null>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -174,7 +178,9 @@ Future<dynamic> signOut(Iterable providers) async {
 class Nonce {
   static final Random _random = Random.secure();
 
-  static List<int> createCryptoRandomInt([int length = 32]) => List<int>.generate(length, (i) => _random.nextInt(256));
+  static List<int> createCryptoRandomInt([int length = 32]) =>
+      List<int>.generate(length, (i) => _random.nextInt(256));
 
-  static String createCryptoRandomString([int length = 32]) => base64Url.encode(Nonce.createCryptoRandomInt(length));
+  static String createCryptoRandomString([int length = 32]) =>
+      base64Url.encode(Nonce.createCryptoRandomInt(length));
 }

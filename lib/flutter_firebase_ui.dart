@@ -89,14 +89,16 @@ class _SignInScreenState extends State<SignInScreen> {
         builder: (BuildContext context) {
           return new Container(
               decoration: new BoxDecoration(color: widget.color),
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _header,
-                  new Expanded(
-                    child: new Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: widget.horizontalPadding),
+              child: SingleChildScrollView(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    _header,
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 300),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: widget.horizontalPadding),
+                      child: new Expanded(
                         child: FutureBuilder<List<ProvidersTypes>>(
                           future: _providers(),
                           initialData: [],
@@ -109,10 +111,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             bottomPadding: widget.bottomPadding,
                             config: widget.config,
                           ),
-                        )),
-                  ),
-                  _footer
-                ],
+                        ),
+                      ),
+                    ),
+                    _footer
+                  ],
+                ),
               ));
         },
       ));
