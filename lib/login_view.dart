@@ -46,8 +46,8 @@ class _LoginViewState extends State<LoginView> {
 
   _handleGuestSignIn() async {
     try {
-      AuthResult authResult = await _auth.signInAnonymously();
-      FirebaseUser user = authResult.user;
+      UserCredential authResult = await _auth.signInAnonymously();
+      User user = authResult.user;
       print(user);
     } catch (e) {
       showErrorDialog(context, e.details ?? e.message);
@@ -62,8 +62,8 @@ class _LoginViewState extends State<LoginView> {
         try {
           AuthCredential credential =
               GoogleAuthProvider.getCredential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
-          AuthResult authResult = await _auth.signInWithCredential(credential);
-          FirebaseUser user = authResult.user;
+          UserCredential authResult = await _auth.signInWithCredential(credential);
+          User user = authResult.user;
           print(user);
         } catch (e) {
           showErrorDialog(context, e.details);
@@ -150,8 +150,8 @@ class _LoginViewState extends State<LoginView> {
       );
 
       // Authenticate with firebase
-      AuthResult authResult = await _auth.signInWithCredential(authCredential);
-      FirebaseUser user = authResult.user;
+      UserCredential authResult = await _auth.signInWithCredential(authCredential);
+      User user = authResult.user;
       print(user);
     } catch (e) {
       showErrorDialog(context, e.details);
@@ -163,8 +163,8 @@ class _LoginViewState extends State<LoginView> {
   //   if (result.accessToken != null) {
   //     try {
   //       AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
-  //       AuthResult authResult = await _auth.signInWithCredential(credential);
-  //       FirebaseUser user = authResult.user;
+  //       UserCredential authResult = await _auth.signInWithCredential(credential);
+  //       User user = authResult.user;
   //       print(user);
   //     } catch (e) {
   //       showErrorDialog(context, e.details);

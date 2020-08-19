@@ -67,7 +67,7 @@ class _EmailViewState extends State<EmailView> {
   _connexion(BuildContext context) async {
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
-      List<String> providers = await auth.fetchSignInMethodsForEmail(email: _controllerEmail.text);
+      List<String> providers = await auth.fetchSignInMethodsForEmail(_controllerEmail.text);
       print(providers);
 
       if (providers == null || providers.isEmpty) {
