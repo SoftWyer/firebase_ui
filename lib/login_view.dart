@@ -23,7 +23,9 @@ class LoginView extends StatefulWidget {
   LoginView(
       {Key key, @required this.providers, this.passwordCheck, @required this.bottomPadding, Map<String, Config> config})
       : this.config = config ?? {},
-        super(key: key);
+        super(key: key) {
+    print("Widget providers are ${this.providers}");
+  }
 
   @override
   _LoginViewState createState() => new _LoginViewState();
@@ -185,6 +187,8 @@ class _LoginViewState extends State<LoginView> {
       ProvidersTypes.guest:
           providersDefinitions(context)[ProvidersTypes.guest].copyWith(onSelected: _handleGuestSignIn),
     };
+
+    print("Widget providers are ${widget.providers}");
 
     return ListView(
       shrinkWrap: false,

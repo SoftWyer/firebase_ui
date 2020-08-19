@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:firebase_ui/config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'login_view.dart';
@@ -56,10 +57,12 @@ class _SignInScreenState extends State<SignInScreen> {
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
   Future<List<ProvidersTypes>> _providers() async {
+    print("Determining providers ${widget.providers}");
+
     List<ProvidersTypes> validProviders = List.from(widget?.providers ?? [ProvidersTypes.email]);
 
     // Apple sign in is only available with iOS 13+, so we check
-    if (Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
+    if (!kIsWeb && Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
       int v = int.tryParse(info.systemVersion.split(r'.')[0]);
@@ -97,15 +100,18 @@ class _SignInScreenState extends State<SignInScreen> {
                       constraints: BoxConstraints(maxWidth: 300),
                       padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                       child: FutureBuilder<List<ProvidersTypes>>(
-                        future: _providers(),
-                        initialData: [],
-                        builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) => LoginView(
-                          providers: snapshot.data,
-                          passwordCheck: _passwordCheck,
-                          bottomPadding: widget.bottomPadding,
-                          config: widget.config,
-                        ),
-                      ),
+                          future: _providers(),
+                          initialData: [],
+                          builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
+                            print("SignIn Snapshot is $snapshot");
+
+                            return LoginView(
+                              providers: snapshot.data,
+                              passwordCheck: _passwordCheck,
+                              bottomPadding: widget.bottomPadding,
+                              config: widget.config,
+                            );
+                          }),
                     ),
                   ),
                   _footer,
