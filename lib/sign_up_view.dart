@@ -29,8 +29,8 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   TextEditingController _controllerEmail;
   TextEditingController _controllerDisplayName;
-  TextEditingController _controllerPassword;
-  TextEditingController _controllerCheckPassword;
+  // TextEditingController _controllerPassword;
+  // TextEditingController _controllerCheckPassword;
 
   final FocusNode _focusPassword = FocusNode();
 
@@ -47,8 +47,8 @@ class _SignUpViewState extends State<SignUpView> {
     super.initState();
     _controllerEmail = new TextEditingController(text: widget.email);
     _controllerDisplayName = new TextEditingController();
-    _controllerPassword = new TextEditingController();
-    _controllerCheckPassword = new TextEditingController();
+    // _controllerPassword = new TextEditingController();
+    // _controllerCheckPassword = new TextEditingController();
   }
 
   @override
@@ -150,9 +150,7 @@ class _SignUpViewState extends State<SignUpView> {
       );
       User user = authResult.user;
       try {
-        var userUpdateInfo = new UserUpdateInfo();
-        userUpdateInfo.displayName = _controllerDisplayName.text;
-        await user.updateProfile(userUpdateInfo);
+        await user.updateProfile(displayName: _controllerDisplayName.text);
 
         _auth.sendPasswordResetEmail(
           email: email,

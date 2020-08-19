@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
       if (googleAuth.accessToken != null) {
         try {
           AuthCredential credential =
-              GoogleAuthProvider.getCredential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+              GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
           UserCredential authResult = await _auth.signInWithCredential(credential);
           User user = authResult.user;
           print(user);
@@ -142,8 +142,9 @@ class _LoginViewState extends State<LoginView> {
       // We can use this to generate an OAuthCredential that can be used with FireBase.
       Map<String, dynamic> appleValidationReponse = jsonDecode(session.body);
 
-      PlatformOAuthCredential authCredential = PlatformOAuthCredential(
+      OAuthCredential authCredential = OAuthCredential(
         providerId: "apple.com",
+        signInMethod: "",
         idToken: appleValidationReponse['idToken'],
         accessToken: appleValidationReponse['accessToken'],
         rawNonce: nonce.toString(),

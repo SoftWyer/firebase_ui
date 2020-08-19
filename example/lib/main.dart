@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _currentUser = _auth.currentUser;
     _currentUser?.getIdToken(true);
 
-    _listener = _auth.onAuthStateChanged.listen((User user) {
+    _listener = _auth.authStateChanges().listen((User user) {
       setState(() {
         _currentUser = user;
       });

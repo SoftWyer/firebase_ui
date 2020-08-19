@@ -71,8 +71,7 @@ class ButtonDescription extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 32.0, 16.0),
               child: icon != null
                   ? Icon(icon, color: labelColor, size: 30)
-                  : Image.asset('assets/$logo',
-                      package: 'firebase_ui', height: 30),
+                  : Image.asset('assets/$logo', package: 'firebase_ui', height: 30),
             ),
             new Expanded(
               child: new Text(
@@ -86,9 +85,7 @@ class ButtonDescription extends StatelessWidget {
   }
 }
 
-Map<ProvidersTypes, ButtonDescription> providersDefinitions(
-        BuildContext context) =>
-    {
+Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
       // ProvidersTypes.facebook: new ButtonDescription(
       //     color: const Color.fromRGBO(59, 87, 157, 1.0),
       //     logo: "fb-logo.png",
@@ -121,8 +118,7 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(
           labelColor: Colors.white),
     };
 
-Future<Null> showErrorDialog(BuildContext context, String message,
-    {String title, bool barrierDismissible = false}) {
+Future<Null> showErrorDialog(BuildContext context, String message, {String title, bool barrierDismissible = false}) {
   return showDialog<Null>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -152,7 +148,7 @@ Future<Null> showErrorDialog(BuildContext context, String message,
 }
 
 Future<void> signOutProviders() async {
-  var currentUser = await FirebaseAuth.instance.currentUser();
+  var currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser != null) {
     await signOut(currentUser.providerData);
   }
@@ -178,9 +174,7 @@ Future<dynamic> signOut(Iterable providers) async {
 class Nonce {
   static final Random _random = Random.secure();
 
-  static List<int> createCryptoRandomInt([int length = 32]) =>
-      List<int>.generate(length, (i) => _random.nextInt(256));
+  static List<int> createCryptoRandomInt([int length = 32]) => List<int>.generate(length, (i) => _random.nextInt(256));
 
-  static String createCryptoRandomString([int length = 32]) =>
-      base64Url.encode(Nonce.createCryptoRandomInt(length));
+  static String createCryptoRandomString([int length = 32]) => base64Url.encode(Nonce.createCryptoRandomInt(length));
 }
