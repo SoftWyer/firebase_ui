@@ -113,8 +113,7 @@ class _PasswordViewState extends State<PasswordView> {
 
     if (user != null) {
       if (user.emailVerified) {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
+        Navigator.pop(context, true);
       } else {
         showErrorDialog(context, FFULocalizations.of(context).checkEmailLink);
       }
