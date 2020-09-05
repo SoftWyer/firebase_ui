@@ -36,41 +36,57 @@ class _LoginViewState extends State<LoginView> {
 
   Map<ProvidersTypes, ButtonDescription> _buttons;
 
-  _handleEmailSignIn() async {
-    String value = await Navigator.of(context).push(new MaterialPageRoute<String>(builder: (BuildContext context) {
-      return new EmailView(widget.passwordCheck);
-    }));
+  bool _isSigningIn = false;
+  User _user;
 
-    if (value != null) {
-      _followProvider(value);
+  _handleEmailSignIn() async {
+    _signingIn(true);
+    try {
+      String value = await Navigator.of(context).push(new MaterialPageRoute<String>(builder: (BuildContext context) {
+        return new EmailView(widget.passwordCheck);
+      }));
+
+      if (value != null) {
+        _followProvider(value);
+      }
+    } finally {
+      _signingIn(false);
     }
   }
 
   _handleGuestSignIn() async {
+    _signingIn(true);
     try {
       UserCredential authResult = await _auth.signInAnonymously();
-      User user = authResult.user;
-      print(user);
+      _user = authResult.user;
+      print(_user);
     } catch (e) {
       showErrorDialog(context, e.details ?? e.message);
+    } finally {
+      _signingIn(false);
     }
   }
 
   _handleGoogleSignIn() async {
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      if (googleAuth.accessToken != null) {
-        try {
-          AuthCredential credential =
-              GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
-          UserCredential authResult = await _auth.signInWithCredential(credential);
-          User user = authResult.user;
-          print(user);
-        } catch (e) {
-          showErrorDialog(context, e.details);
+    _signingIn(true);
+    try {
+      GoogleSignInAccount googleUser = await googleSignIn.signIn();
+      if (googleUser != null) {
+        GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        if (googleAuth.accessToken != null) {
+          try {
+            AuthCredential credential =
+                GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+            UserCredential authResult = await _auth.signInWithCredential(credential);
+            _user = authResult.user;
+            print(_user);
+          } catch (e) {
+            showErrorDialog(context, e.details);
+          }
         }
       }
+    } finally {
+      _signingIn(false);
     }
   }
 
@@ -89,75 +105,90 @@ class _LoginViewState extends State<LoginView> {
   /// ```
 
   _handleAppleSignIn() async {
+    _signingIn(true);
     assert(widget.config[AppleConfig.configName] != null,
         "You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}");
 
-    AppleConfig appleConfig = widget.config[AppleConfig.configName];
-
-    // Generate a none and SH256 hash (SoftWyer)
-    String nonce = Nonce.createCryptoRandomString();
-    Digest hashedNonce = sha256.convert(nonce.codeUnits);
-
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-      webAuthenticationOptions: WebAuthenticationOptions(
-        // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-        clientId: appleConfig.clientId,
-        redirectUri: Uri(scheme: appleConfig.scheme, host: appleConfig.host, path: appleConfig.redirectPath),
-      ),
-      nonce: hashedNonce.toString(),
-      // state: 'example-state',
-    );
-
-    print(credential);
-
-    // This is the endpoint that will convert an authorization code obtained
-    // via Sign in with Apple into a session in your system
-    final signInWithAppleEndpoint = Uri(
-      scheme: appleConfig.scheme,
-      host: appleConfig.host,
-      path: appleConfig.path,
-      queryParameters: <String, String>{
-        'code': credential.authorizationCode,
-        'firstName': credential.givenName,
-        'lastName': credential.familyName,
-        'useBundleId': Platform.isIOS || Platform.isMacOS ? 'true' : 'false',
-        if (credential.state != null) 'state': credential.state,
-      },
-    );
-
-    final session = await http.Client().post(
-      signInWithAppleEndpoint,
-    );
-
-    // If we got this far, a session based on the Apple ID credential has been created in your system,
-    // and you can now set this as the app's session
-    print(session);
-
     try {
+      AppleConfig appleConfig = widget.config[AppleConfig.configName];
+
+      // Generate a none and SH256 hash (SoftWyer)
+      String nonce = Nonce.createCryptoRandomString();
+      Digest hashedNonce = sha256.convert(nonce.codeUnits);
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+          clientId: appleConfig.clientId,
+          redirectUri: Uri(scheme: appleConfig.scheme, host: appleConfig.host, path: appleConfig.redirectPath),
+        ),
+        nonce: hashedNonce.toString(),
+        // state: 'example-state',
+      );
+
+      print(credential);
+
+      // This is the endpoint that will convert an authorization code obtained
+      // via Sign in with Apple into a session in your system
+      final signInWithAppleEndpoint = Uri(
+        scheme: appleConfig.scheme,
+        host: appleConfig.host,
+        path: appleConfig.path,
+        queryParameters: <String, String>{
+          'code': credential.authorizationCode,
+          'firstName': credential.givenName,
+          'lastName': credential.familyName,
+          'useBundleId': Platform.isIOS || Platform.isMacOS ? 'true' : 'false',
+          if (credential.state != null) 'state': credential.state,
+        },
+      );
+
+      final session = await http.Client().post(
+        signInWithAppleEndpoint,
+      );
+
+      // If we got this far, a session based on the Apple ID credential has been created in your system,
+      // and you can now set this as the app's session
+      print(session);
+
       // SoftWyer note
       //
       // This is the section that decodes the session response to retrieve the access and id tokens
       // We can use this to generate an OAuthCredential that can be used with FireBase.
       Map<String, dynamic> appleValidationReponse = jsonDecode(session.body);
 
-      OAuthCredential authCredential = OAuthCredential(
-        providerId: "apple.com",
-        signInMethod: "",
+      // This no longer works with the latest Firebase Flutter libraries
+      // OAuthCredential authCredential = OAuthCredential(
+      //   providerId: "apple.com",
+      //   signInMethod: "",
+      //   idToken: appleValidationReponse['idToken'],
+      //   accessToken: appleValidationReponse['accessToken'],
+      //   rawNonce: nonce.toString(),
+      // );
+
+      final oAuthProvider = OAuthProvider('apple.com');
+      final providerCredential = oAuthProvider.credential(
         idToken: appleValidationReponse['idToken'],
         accessToken: appleValidationReponse['accessToken'],
         rawNonce: nonce.toString(),
       );
 
       // Authenticate with firebase
-      UserCredential authResult = await _auth.signInWithCredential(authCredential);
-      User user = authResult.user;
-      print(user);
+      UserCredential authResult = await _auth.signInWithCredential(providerCredential);
+      _user = authResult.user;
+      print(_user);
     } catch (e) {
-      showErrorDialog(context, e.details);
+      print("Exception");
+      print(e);
+      if (e?.code != AuthorizationErrorCode.canceled) {
+        showErrorDialog(context, e?.message ?? "Unknown");
+      }
+    } finally {
+      _signingIn(false);
     }
   }
 
@@ -175,17 +206,26 @@ class _LoginViewState extends State<LoginView> {
   //   }
   // }
 
+  void _signingIn(bool isSigningIn) {
+    if (_user != null || isSigningIn != _isSigningIn) {
+      setState(() {
+        _isSigningIn = isSigningIn;
+      });
+      _user = null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _buttons = {
-      ProvidersTypes.google:
-          providersDefinitions(context)[ProvidersTypes.google].copyWith(onSelected: _handleGoogleSignIn),
-      ProvidersTypes.apple:
-          providersDefinitions(context)[ProvidersTypes.apple].copyWith(onSelected: _handleAppleSignIn),
-      ProvidersTypes.email:
-          providersDefinitions(context)[ProvidersTypes.email].copyWith(onSelected: _handleEmailSignIn),
-      ProvidersTypes.guest:
-          providersDefinitions(context)[ProvidersTypes.guest].copyWith(onSelected: _handleGuestSignIn),
+      ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google].copyWith(
+          onSelected: _isSigningIn ? null : _handleGoogleSignIn, labelColor: _isSigningIn ? Colors.white : null),
+      ProvidersTypes.apple: providersDefinitions(context)[ProvidersTypes.apple]
+          .copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
+      ProvidersTypes.email: providersDefinitions(context)[ProvidersTypes.email]
+          .copyWith(onSelected: _isSigningIn ? null : _handleEmailSignIn),
+      ProvidersTypes.guest: providersDefinitions(context)[ProvidersTypes.guest]
+          .copyWith(onSelected: _isSigningIn ? null : _handleGuestSignIn),
     };
 
     print("Widget providers are ${widget.providers}");

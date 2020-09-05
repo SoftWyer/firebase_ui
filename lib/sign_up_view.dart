@@ -161,7 +161,7 @@ class _SignUpViewState extends State<SignUpView> {
         Navigator.pop(context, true);
       } catch (e) {
         String msg = "An error occurred: $e";
-        showErrorDialog(context, msg);
+        // showErrorDialog(context, msg);
       }
     } on PlatformException catch (e) {
       print(e);

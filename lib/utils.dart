@@ -7,18 +7,15 @@ import 'package:firebase_ui/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-enum ProvidersTypes { email, google, apple, facebook, guest, phone }
+enum ProvidersTypes { email, google, apple, guest, phone }
 
 final GoogleSignIn googleSignIn = new GoogleSignIn();
-// final FacebookLogin facebookLogin = new FacebookLogin();
 
 ProvidersTypes stringToProvidersType(String value) {
-  if (value.toLowerCase().contains('facebook')) return ProvidersTypes.facebook;
   if (value.toLowerCase().contains('google')) return ProvidersTypes.google;
   if (value.toLowerCase().contains('apple')) return ProvidersTypes.apple;
   if (value.toLowerCase().contains('password')) return ProvidersTypes.email;
   if (value.toLowerCase().contains('guest')) return ProvidersTypes.guest;
-//TODO  if (value.toLowerCase().contains('phone')) return ProvidersTypes.phone;
   return null;
 }
 
@@ -62,7 +59,6 @@ class ButtonDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VoidCallback _onSelected = onSelected ?? () => {};
     return new RaisedButton(
         color: color,
         child: new Row(
@@ -81,17 +77,11 @@ class ButtonDescription extends StatelessWidget {
             ),
           ],
         ),
-        onPressed: _onSelected);
+        onPressed: onSelected ?? null);
   }
 }
 
 Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
-      // ProvidersTypes.facebook: new ButtonDescription(
-      //     color: const Color.fromRGBO(59, 87, 157, 1.0),
-      //     logo: "fb-logo.png",
-      //     label: FFULocalizations.of(context).signInFacebook,
-      //     name: "Facebook",
-      //     labelColor: Colors.white),
       ProvidersTypes.google: new ButtonDescription(
           color: Theme.of(context).cardColor,
           logo: "go-logo.png",

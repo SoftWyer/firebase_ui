@@ -51,8 +51,8 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Widget get _header => widget.header ?? new Container();
-  Widget get _footer => widget.footer ?? new Container();
+  Widget get _header => widget.header ?? SizedBox.shrink();
+  Widget get _footer => widget.footer ?? SizedBox.shrink();
 
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
@@ -77,46 +77,51 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: widget.showBar
-          ? AppBar(
-              title: Text(widget.title),
-              elevation: 4.0,
-              automaticallyImplyLeading: widget.allowBackAction,
-            )
-          : null,
-      resizeToAvoidBottomInset: widget.avoidBottomInset,
-      body: Builder(
-        builder: (BuildContext context) {
-          return Container(
-              decoration: BoxDecoration(color: widget.color),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _header,
-                  Expanded(
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 300),
-                      padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-                      child: FutureBuilder<List<ProvidersTypes>>(
-                          future: _providers(),
-                          initialData: [],
-                          builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
-                            print("SignIn Snapshot is $snapshot");
-
-                            return LoginView(
-                              providers: snapshot.data,
-                              passwordCheck: _passwordCheck,
-                              bottomPadding: widget.bottomPadding,
-                              config: widget.config,
-                            );
-                          }),
-                    ),
-                  ),
-                  _footer,
-                ],
-              ));
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: () {
+          Future.value(widget.allowBackAction);
         },
-      ));
+        child: Scaffold(
+            appBar: widget.showBar
+                ? AppBar(
+                    title: Text(widget.title),
+                    elevation: 4.0,
+                    automaticallyImplyLeading: widget.allowBackAction,
+                  )
+                : null,
+            resizeToAvoidBottomInset: widget.avoidBottomInset,
+            body: Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    decoration: BoxDecoration(color: widget.color),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        _header,
+                        Expanded(
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 300),
+                            padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+                            child: FutureBuilder<List<ProvidersTypes>>(
+                                future: _providers(),
+                                initialData: [],
+                                builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
+                                  print("SignIn Snapshot is $snapshot");
+
+                                  return LoginView(
+                                    providers: snapshot.data,
+                                    passwordCheck: _passwordCheck,
+                                    bottomPadding: widget.bottomPadding,
+                                    config: widget.config,
+                                  );
+                                }),
+                          ),
+                        ),
+                        _footer,
+                      ],
+                    ));
+              },
+            )),
+      );
 }
