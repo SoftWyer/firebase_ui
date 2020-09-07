@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'email_view.dart';
 import 'utils.dart';
@@ -105,9 +106,12 @@ class _LoginViewState extends State<LoginView> {
   /// ```
 
   _handleAppleSignIn() async {
-    _signingIn(true);
     assert(widget.config[AppleConfig.configName] != null,
         "You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}");
+    _signingIn(true);
+
+    var pr = new ProgressDialog(context);
+    pr.style(message: 'Validating tokens...');
 
     try {
       AppleConfig appleConfig = widget.config[AppleConfig.configName];
@@ -130,10 +134,15 @@ class _LoginViewState extends State<LoginView> {
         // state: 'example-state',
       );
 
+      await pr.show();
+
       print(credential);
 
       // This is the endpoint that will convert an authorization code obtained
       // via Sign in with Apple into a session in your system
+      // NB: If using Glitch, you might want to pre-warm this endpoint by making a request prior to calling
+      // sign-in as Glitch may have put the server to sleep and the nonces at Apple will fail your app if it
+      // takes too long to respond.
       final signInWithAppleEndpoint = Uri(
         scheme: appleConfig.scheme,
         host: appleConfig.host,
@@ -188,6 +197,8 @@ class _LoginViewState extends State<LoginView> {
         showErrorDialog(context, e?.message ?? "Unknown");
       }
     } finally {
+      await pr.hide();
+
       _signingIn(false);
     }
   }
