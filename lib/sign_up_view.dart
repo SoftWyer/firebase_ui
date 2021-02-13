@@ -8,12 +8,12 @@ import 'l10n/localization.dart';
 import 'utils.dart';
 
 String _randomString(int length) {
-  var rand = new Random();
-  var codeUnits = new List.generate(length, (index) {
+  var rand = Random();
+  var codeUnits = List.generate(length, (index) {
     return rand.nextInt(33) + 89;
   });
 
-  return new String.fromCharCodes(codeUnits);
+  return String.fromCharCodes(codeUnits);
 }
 
 class SignUpView extends StatefulWidget {
@@ -23,7 +23,7 @@ class SignUpView extends StatefulWidget {
   SignUpView(this.email, this.passwordCheck, {Key key}) : super(key: key);
 
   @override
-  _SignUpViewState createState() => new _SignUpViewState();
+  _SignUpViewState createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
@@ -45,63 +45,63 @@ class _SignUpViewState extends State<SignUpView> {
   @override
   initState() {
     super.initState();
-    _controllerEmail = new TextEditingController(text: widget.email);
-    _controllerDisplayName = new TextEditingController();
-    // _controllerPassword = new TextEditingController();
-    // _controllerCheckPassword = new TextEditingController();
+    _controllerEmail = TextEditingController(text: widget.email);
+    _controllerDisplayName = TextEditingController();
+    // _controllerPassword = TextEditingController();
+    // _controllerCheckPassword = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     _controllerEmail.text = widget.email;
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(FFULocalizations.of(context).signUpTitle),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(FFULocalizations.of(context).signUpTitle),
         elevation: 4.0,
       ),
-      body: new Builder(
+      body: Builder(
         builder: (BuildContext context) {
-          return new Padding(
+          return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: new ListView(
+            child: ListView(
               children: <Widget>[
                 const SizedBox(height: 8.0),
                 Text(
                   'After saving, check your email for a password reset link and then log in again',
                 ),
-                new TextField(
+                TextField(
                   controller: _controllerEmail,
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
                   onSubmitted: _submit,
-                  decoration: new InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                 ),
                 const SizedBox(height: 8.0),
-                new TextField(
+                TextField(
                   controller: _controllerDisplayName,
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   autocorrect: false,
                   onChanged: _checkValid,
                   onSubmitted: _submitDisplayName,
-                  decoration: new InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
+                  decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
                 ),
                 const SizedBox(height: 8.0),
-                // new TextField(
+                // TextField(
                 //   controller: _controllerPassword,
                 //   obscureText: true,
                 //   autocorrect: false,
                 //   onSubmitted: _submit,
                 //   focusNode: _focusPassword,
-                //   decoration: new InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
+                //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
                 // ),
                 // !widget.passwordCheck
-                //     ? new Container()
-                //     : new TextField(
+                //     ? Container()
+                //     : TextField(
                 //         controller: _controllerCheckPassword,
                 //         obscureText: true,
                 //         autocorrect: false,
-                //         decoration: new InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
+                //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
                 //       ),
               ],
             ),
@@ -109,15 +109,15 @@ class _SignUpViewState extends State<SignUpView> {
         },
       ),
       persistentFooterButtons: <Widget>[
-        new ButtonBar(
+        ButtonBar(
           alignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new FlatButton(
+            TextButton(
                 onPressed: _valid ? () => _connexion(context) : null,
-                child: new Row(
+                child: Row(
                   children: <Widget>[
-                    new Text(FFULocalizations.of(context).saveLabel),
+                    Text(FFULocalizations.of(context).saveLabel),
                   ],
                 )),
           ],
@@ -161,6 +161,7 @@ class _SignUpViewState extends State<SignUpView> {
         Navigator.pop(context, true);
       } catch (e) {
         String msg = "An error occurred: $e";
+        print(msg);
         // showErrorDialog(context, msg);
       }
     } on PlatformException catch (e) {

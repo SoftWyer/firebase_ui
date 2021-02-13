@@ -1,20 +1,25 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
 import 'package:firebase_ui/l10n/localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(new MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
-      theme: new ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       localizationsDelegates: [
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
         const Locale('pt', 'BR'),
         const Locale('es', 'MX'),
       ],
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -40,7 +45,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -64,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if (_currentUser == null) {
-      return new SignInScreen(
+      return SignInScreen(
         config: {
           AppleConfig.configName: AppleConfig(
             'https://',
@@ -75,11 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         },
         title: "Demo",
-        header: new Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: new Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: new Text("Demo"),
+        header: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: Text("Demo"),
           ),
         ),
         showBar: true,
@@ -95,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       );
     } else {
-      return new HomeScreen(user: _currentUser);
+      return HomeScreen(user: _currentUser);
     }
   }
 
@@ -117,32 +121,32 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({this.user});
 
   @override
-  Widget build(BuildContext context) => new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Bienvenue"),
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(
+        title: Text("Bienvenue"),
         elevation: 4.0,
       ),
-      body: new Container(
+      body: Container(
           padding: const EdgeInsets.all(16.0),
-          decoration: new BoxDecoration(color: Colors.amber),
-          child: new Column(
+          decoration: BoxDecoration(color: Colors.amber),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Text("Welcome,"),
+                  Text("Welcome,"),
                 ],
               ),
-              new SizedBox(
+              SizedBox(
                 height: 8.0,
               ),
-              new Text(user.displayName ?? user.email),
-              new SizedBox(
+              Text(user.displayName ?? user.email),
+              SizedBox(
                 height: 32.0,
               ),
-              new RaisedButton(child: new Text("DECONNEXION"), onPressed: _logout)
+              ElevatedButton(child: Text("DECONNEXION"), onPressed: _logout)
             ],
           )));
 

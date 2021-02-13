@@ -9,7 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 enum ProvidersTypes { email, google, apple, guest, phone }
 
-final GoogleSignIn googleSignIn = new GoogleSignIn();
+final GoogleSignIn googleSignIn = GoogleSignIn();
 
 ProvidersTypes stringToProvidersType(String value) {
   if (value.toLowerCase().contains('google')) return ProvidersTypes.google;
@@ -47,7 +47,7 @@ class ButtonDescription extends StatelessWidget {
     String name,
     VoidCallback onSelected,
   }) {
-    return new ButtonDescription(
+    return ButtonDescription(
         label: label ?? this.label,
         labelColor: labelColor ?? this.labelColor,
         color: color ?? this.color,
@@ -59,20 +59,20 @@ class ButtonDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new RaisedButton(
+    return RaisedButton(
         color: color,
-        child: new Row(
+        child: Row(
           children: <Widget>[
-            new Container(
+            Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 32.0, 16.0),
               child: icon != null
                   ? Icon(icon, color: labelColor, size: 30)
                   : Image.asset('assets/$logo', package: 'firebase_ui', height: 30),
             ),
-            new Expanded(
-              child: new Text(
+            Expanded(
+              child: Text(
                 label,
-                style: new TextStyle(color: labelColor),
+                style: TextStyle(color: labelColor),
               ),
             ),
           ],
@@ -82,25 +82,25 @@ class ButtonDescription extends StatelessWidget {
 }
 
 Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
-      ProvidersTypes.google: new ButtonDescription(
+      ProvidersTypes.google: ButtonDescription(
           color: Theme.of(context).cardColor,
           logo: "go-logo.png",
           label: FFULocalizations.of(context).signInGoogle,
           name: "Google",
           labelColor: Colors.black87),
-      ProvidersTypes.apple: new ButtonDescription(
+      ProvidersTypes.apple: ButtonDescription(
           color: Colors.black,
           logo: "apple.png",
           label: FFULocalizations.of(context).signInApple,
           name: "Apple",
           labelColor: Colors.white),
-      ProvidersTypes.email: new ButtonDescription(
+      ProvidersTypes.email: ButtonDescription(
           color: const Color.fromRGBO(219, 68, 55, 1.0),
           logo: "email-logo.png",
           label: FFULocalizations.of(context).signInEmail,
           name: "Email",
           labelColor: Colors.white),
-      ProvidersTypes.guest: new ButtonDescription(
+      ProvidersTypes.guest: ButtonDescription(
           color: const Color.fromRGBO(244, 180, 0, 1.0),
           icon: Icons.person,
           label: FFULocalizations.of(context).signInGuest,
@@ -112,20 +112,20 @@ Future<Null> showErrorDialog(BuildContext context, String message, {String title
   return showDialog<Null>(
     context: context,
     barrierDismissible: barrierDismissible,
-    builder: (BuildContext context) => new AlertDialog(
-      title: title != null ? new Text(title) : null,
-      content: new SingleChildScrollView(
-        child: new ListBody(
+    builder: (BuildContext context) => AlertDialog(
+      title: title != null ? Text(title) : null,
+      content: SingleChildScrollView(
+        child: ListBody(
           children: <Widget>[
-            new Text(message ?? FFULocalizations.of(context).errorOccurred),
+            Text(message ?? FFULocalizations.of(context).errorOccurred),
           ],
         ),
       ),
       actions: <Widget>[
-        new FlatButton(
-          child: new Row(
+        TextButton(
+          child: Row(
             children: <Widget>[
-              new Text(FFULocalizations.of(context).cancelButtonLabel),
+              Text(FFULocalizations.of(context).cancelButtonLabel),
             ],
           ),
           onPressed: () {
