@@ -50,7 +50,8 @@ class TranslationBundle {
 
   String get errorOccurred => parent?.errorOccurred;
 
-  allReadyEmailMessage(String email, String providerName) => parent?.allReadyEmailMessage(email, providerName);
+  allReadyEmailMessage(String email, String providerName) =>
+      parent?.allReadyEmailMessage(email, providerName);
 
   recoverDialog(String email) => parent?.recoverDialog(email);
 }
@@ -91,14 +92,16 @@ class _Bundle_fr extends TranslationBundle {
   String get troubleSigningInLabel => 'Difficultés à se connecter ?';
 
   @override
-  String get passwordInvalidMessage => 'Le mot de passe est invalide ou l\'utilisateur n\'a pas de mot de passe.';
+  String get passwordInvalidMessage =>
+      'Le mot de passe est invalide ou l\'utilisateur n\'a pas de mot de passe.';
 
   @override
   String get recoverPasswordTitle => r'Récupérer mot de passe';
 
   @override
   String get recoverHelpLabel =>
-      r'Obtenez des instructions envoyées à cet e-mail ' + 'pour expliquer comment réinitialiser votre mot de passe';
+      r'Obtenez des instructions envoyées à cet e-mail ' +
+      'pour expliquer comment réinitialiser votre mot de passe';
 
   @override
   String get sendButtonLabel => r'ENVOYER';
@@ -176,13 +179,15 @@ class _Bundle_en extends TranslationBundle {
   String get troubleSigningInLabel => 'Trouble signing in ?';
 
   @override
-  String get passwordInvalidMessage => 'The password is invalid or the user does not have password.';
+  String get passwordInvalidMessage =>
+      'The password is invalid or the user does not have password.';
 
   @override
   String get recoverPasswordTitle => r'Recover password';
 
   @override
-  String get recoverHelpLabel => r'Get instructions sent to this email ' + 'that explain how to reset your password';
+  String get recoverHelpLabel =>
+      r'Get instructions sent to this email ' + 'that explain how to reset your password';
 
   @override
   String get sendButtonLabel => r'SEND';
@@ -260,13 +265,15 @@ class _Bundle_de extends TranslationBundle {
   String get troubleSigningInLabel => 'Probleme beim Anmelden?';
 
   @override
-  String get passwordInvalidMessage => 'Das Passwort ist ungültig oder der Bentutzer hat kein Passwort.';
+  String get passwordInvalidMessage =>
+      'Das Passwort ist ungültig oder der Bentutzer hat kein Passwort.';
 
   @override
   String get recoverPasswordTitle => r'Passwort wiederherstellen';
 
   @override
-  String get recoverHelpLabel => r'Erhalte Anweisungen zum Wiederherstellen des Passworts ' + 'an diese Email';
+  String get recoverHelpLabel =>
+      r'Erhalte Anweisungen zum Wiederherstellen des Passworts ' + 'an diese Email';
 
   @override
   String get sendButtonLabel => r'SENDEN';
@@ -427,14 +434,16 @@ class _Bundle_es extends TranslationBundle {
   String get troubleSigningInLabel => 'Problemas para entrar ?';
 
   @override
-  String get passwordInvalidMessage => 'La contraseña es inválida o el usuario no tiene contraseña.';
+  String get passwordInvalidMessage =>
+      'La contraseña es inválida o el usuario no tiene contraseña.';
 
   @override
   String get recoverPasswordTitle => r'Recuperar contraseña';
 
   @override
   String get recoverHelpLabel =>
-      r'Sigue las instrucciones enviadas a este email ' + 'para descubrir cómo reiniciar tu contraseña';
+      r'Sigue las instrucciones enviadas a este email ' +
+      'para descubrir cómo reiniciar tu contraseña';
 
   @override
   String get sendButtonLabel => r'ENVIAR';
@@ -487,5 +496,5 @@ TranslationBundle translationBundleForLocale(Locale locale) {
     case 'es':
       return const _Bundle_es();
   }
-  return const TranslationBundle(null);
+  return const _Bundle_en();
 }
