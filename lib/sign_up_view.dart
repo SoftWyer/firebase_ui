@@ -150,7 +150,7 @@ class _SignUpViewState extends State<SignUpView> {
       );
       User user = authResult.user;
       try {
-        await user.updateProfile(displayName: _controllerDisplayName.text);
+        await user.updateDisplayName(_controllerDisplayName.text);
 
         _auth.sendPasswordResetEmail(
           email: email,

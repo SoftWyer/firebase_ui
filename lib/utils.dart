@@ -59,8 +59,10 @@ class ButtonDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-        color: color,
+    return ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(color),
+        ),
         child: Row(
           children: <Widget>[
             Container(
