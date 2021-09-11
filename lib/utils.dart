@@ -11,7 +11,7 @@ enum ProvidersTypes { email, google, apple, guest, phone }
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-ProvidersTypes stringToProvidersType(String value) {
+ProvidersTypes? stringToProvidersType(String value) {
   if (value.toLowerCase().contains('google')) return ProvidersTypes.google;
   if (value.toLowerCase().contains('apple')) return ProvidersTypes.apple;
   if (value.toLowerCase().contains('password')) return ProvidersTypes.email;
@@ -21,17 +21,17 @@ ProvidersTypes stringToProvidersType(String value) {
 
 // Description button
 class ButtonDescription extends StatelessWidget {
-  final String label;
+  final String? label;
   final Color labelColor;
   final Color color;
-  final String logo;
-  final IconData icon;
+  final String? logo;
+  final IconData? icon;
   final String name;
-  final VoidCallback onSelected;
+  final VoidCallback? onSelected;
 
   const ButtonDescription(
-      {@required this.label,
-      @required this.name,
+      {required this.label,
+      required this.name,
       this.logo,
       this.icon,
       this.onSelected,
@@ -39,13 +39,13 @@ class ButtonDescription extends StatelessWidget {
       this.color = Colors.white});
 
   ButtonDescription copyWith({
-    String label,
-    Color labelColor,
-    Color color,
-    String logo,
-    IconData icon,
-    String name,
-    VoidCallback onSelected,
+    String? label,
+    Color? labelColor,
+    Color? color,
+    String? logo,
+    IconData? icon,
+    String? name,
+    VoidCallback? onSelected,
   }) {
     return ButtonDescription(
         label: label ?? this.label,
@@ -73,7 +73,7 @@ class ButtonDescription extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                label,
+                label!,
                 style: TextStyle(color: labelColor),
               ),
             ),
@@ -110,7 +110,7 @@ Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context
           labelColor: Colors.white),
     };
 
-Future<Null> showErrorDialog(BuildContext context, String message, {String title, bool barrierDismissible = false}) {
+Future<Null> showErrorDialog(BuildContext context, String? message, {String? title, bool barrierDismissible = false}) {
   return showDialog<Null>(
     context: context,
     barrierDismissible: barrierDismissible,
@@ -119,7 +119,7 @@ Future<Null> showErrorDialog(BuildContext context, String message, {String title
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text(message ?? FFULocalizations.of(context).errorOccurred),
+            Text(message ?? FFULocalizations.of(context).errorOccurred!),
           ],
         ),
       ),
@@ -127,7 +127,7 @@ Future<Null> showErrorDialog(BuildContext context, String message, {String title
         TextButton(
           child: Row(
             children: <Widget>[
-              Text(FFULocalizations.of(context).cancelButtonLabel),
+              Text(FFULocalizations.of(context).cancelButtonLabel!),
             ],
           ),
           onPressed: () {
@@ -149,7 +149,7 @@ Future<void> signOutProviders() async {
 }
 
 Future<dynamic> signOut(Iterable providers) async {
-  return Future.forEach(providers, (p) async {
+  return Future.forEach(providers, (dynamic p) async {
     switch (p.providerId) {
       // case 'facebook.com':
       //   await facebookLogin.logOut();

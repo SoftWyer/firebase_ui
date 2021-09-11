@@ -2,53 +2,53 @@ import 'dart:ui' show Locale;
 
 class TranslationBundle {
   const TranslationBundle(this.parent);
-  final TranslationBundle parent;
+  final TranslationBundle? parent;
 
-  String get welcome => parent?.welcome;
+  String? get welcome => parent?.welcome;
 
-  String get signUpTitle => parent?.signUpTitle;
+  String? get signUpTitle => parent?.signUpTitle;
 
-  String get emailLabel => parent?.emailLabel;
+  String? get emailLabel => parent?.emailLabel;
 
-  String get nextButtonLabel => parent?.nextButtonLabel;
+  String? get nextButtonLabel => parent?.nextButtonLabel;
 
-  String get cancelButtonLabel => parent?.cancelButtonLabel;
+  String? get cancelButtonLabel => parent?.cancelButtonLabel;
 
-  String get passwordLabel => parent?.passwordLabel;
+  String? get passwordLabel => parent?.passwordLabel;
 
-  String get passwordCheckLabel => parent?.passwordCheckLabel;
+  String? get passwordCheckLabel => parent?.passwordCheckLabel;
 
-  String get passwordCheckError => parent?.passwordCheckError;
+  String? get passwordCheckError => parent?.passwordCheckError;
 
-  String get troubleSigningInLabel => parent?.troubleSigningInLabel;
+  String? get troubleSigningInLabel => parent?.troubleSigningInLabel;
 
-  String get signInLabel => parent?.signInLabel;
+  String? get signInLabel => parent?.signInLabel;
 
-  String get signInTitle => parent?.signInTitle;
+  String? get signInTitle => parent?.signInTitle;
 
-  String get passwordInvalidMessage => parent?.passwordInvalidMessage;
+  String? get passwordInvalidMessage => parent?.passwordInvalidMessage;
 
-  String get checkEmailLink => parent?.checkEmailLink;
+  String? get checkEmailLink => parent?.checkEmailLink;
 
-  String get recoverPasswordTitle => parent?.recoverPasswordTitle;
+  String? get recoverPasswordTitle => parent?.recoverPasswordTitle;
 
-  String get recoverHelpLabel => parent?.recoverHelpLabel;
+  String? get recoverHelpLabel => parent?.recoverHelpLabel;
 
-  String get sendButtonLabel => parent?.sendButtonLabel;
+  String? get sendButtonLabel => parent?.sendButtonLabel;
 
-  String get nameLabel => parent?.nameLabel;
+  String? get nameLabel => parent?.nameLabel;
 
-  String get saveLabel => parent?.saveLabel;
+  String? get saveLabel => parent?.saveLabel;
 
-  String get passwordLengthMessage => parent?.passwordLengthMessage;
+  String? get passwordLengthMessage => parent?.passwordLengthMessage;
 
-  String get signInFacebook => parent?.signInFacebook;
-  String get signInGoogle => parent?.signInGoogle;
-  String get signInApple => parent?.signInApple;
-  String get signInEmail => parent?.signInEmail;
-  String get signInGuest => parent?.signInGuest;
+  String? get signInFacebook => parent?.signInFacebook;
+  String? get signInGoogle => parent?.signInGoogle;
+  String? get signInApple => parent?.signInApple;
+  String? get signInEmail => parent?.signInEmail;
+  String? get signInGuest => parent?.signInGuest;
 
-  String get errorOccurred => parent?.errorOccurred;
+  String? get errorOccurred => parent?.errorOccurred;
 
   allReadyEmailMessage(String email, String providerName) =>
       parent?.allReadyEmailMessage(email, providerName);

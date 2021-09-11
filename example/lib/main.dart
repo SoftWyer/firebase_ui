@@ -40,9 +40,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -50,9 +50,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  StreamSubscription<User> _listener;
+  late StreamSubscription<User?> _listener;
 
-  User _currentUser;
+  User? _currentUser;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return SignInScreen(
         config: {
           AppleConfig.configName: AppleConfig(
-            'https://',
+            'https',
             'funky.glitch.com',
             'signinwithapple',
             'callbacks/signin',
@@ -107,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _currentUser = _auth.currentUser;
     _currentUser?.getIdToken(true);
 
-    _listener = _auth.authStateChanges().listen((User user) {
+    _listener = _auth.authStateChanges().listen((User? user) {
       setState(() {
         _currentUser = user;
       });
@@ -116,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class HomeScreen extends StatelessWidget {
-  final User user;
+  final User? user;
 
   HomeScreen({this.user});
 
@@ -142,7 +142,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 8.0,
               ),
-              Text(user.displayName ?? user.email),
+              Text(user!.displayName ?? user!.email!),
               SizedBox(
                 height: 32.0,
               ),

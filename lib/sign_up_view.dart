@@ -18,17 +18,17 @@ String _randomString(int length) {
 
 class SignUpView extends StatefulWidget {
   final String email;
-  final bool passwordCheck;
+  final bool? passwordCheck;
 
-  SignUpView(this.email, this.passwordCheck, {Key key}) : super(key: key);
+  SignUpView(this.email, this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
   _SignUpViewState createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  TextEditingController _controllerEmail;
-  TextEditingController _controllerDisplayName;
+  TextEditingController? _controllerEmail;
+  TextEditingController? _controllerDisplayName;
   // TextEditingController _controllerPassword;
   // TextEditingController _controllerCheckPassword;
 
@@ -53,10 +53,10 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail.text = widget.email;
+    _controllerEmail!.text = widget.email;
     return Scaffold(
       appBar: AppBar(
-        title: Text(FFULocalizations.of(context).signUpTitle),
+        title: Text(FFULocalizations.of(context).signUpTitle!),
         elevation: 4.0,
       ),
       body: Builder(
@@ -117,7 +117,7 @@ class _SignUpViewState extends State<SignUpView> {
                 onPressed: _valid ? () => _connexion(context) : null,
                 child: Row(
                   children: <Widget>[
-                    Text(FFULocalizations.of(context).saveLabel),
+                    Text(FFULocalizations.of(context).saveLabel!),
                   ],
                 )),
           ],
@@ -140,7 +140,7 @@ class _SignUpViewState extends State<SignUpView> {
     //   return;
     // }
 
-    String email = _controllerEmail.text;
+    String email = _controllerEmail!.text;
 
     FirebaseAuth _auth = FirebaseAuth.instance;
     try {
@@ -148,9 +148,9 @@ class _SignUpViewState extends State<SignUpView> {
         email: email,
         password: _randomString(16),
       );
-      User user = authResult.user;
+      User user = authResult.user!;
       try {
-        await user.updateDisplayName(_controllerDisplayName.text);
+        await user.updateDisplayName(_controllerDisplayName!.text);
 
         _auth.sendPasswordResetEmail(
           email: email,
@@ -167,14 +167,14 @@ class _SignUpViewState extends State<SignUpView> {
     } on PlatformException catch (e) {
       print(e);
       //TODO improve errors catching
-      String msg = e?.message;
+      String? msg = e.message;
       showErrorDialog(context, msg);
     }
   }
 
   void _checkValid(String value) {
     setState(() {
-      _valid = _controllerDisplayName.text.isNotEmpty;
+      _valid = _controllerDisplayName!.text.isNotEmpty;
     });
   }
 }

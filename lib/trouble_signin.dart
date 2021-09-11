@@ -7,14 +7,14 @@ import 'utils.dart';
 class TroubleSignIn extends StatefulWidget {
   final String email;
 
-  TroubleSignIn(this.email, {Key key}) : super(key: key);
+  TroubleSignIn(this.email, {Key? key}) : super(key: key);
 
   @override
   _TroubleSignInState createState() => _TroubleSignInState();
 }
 
 class _TroubleSignInState extends State<TroubleSignIn> {
-  TextEditingController _controllerEmail;
+  TextEditingController? _controllerEmail;
 
   @override
   initState() {
@@ -24,10 +24,10 @@ class _TroubleSignInState extends State<TroubleSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail.text = widget.email;
+    _controllerEmail!.text = widget.email;
     return Scaffold(
       appBar: AppBar(
-        title: Text(FFULocalizations.of(context).recoverPasswordTitle),
+        title: Text(FFULocalizations.of(context).recoverPasswordTitle!),
         elevation: 4.0,
       ),
       body: Builder(
@@ -46,7 +46,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
                 Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      FFULocalizations.of(context).recoverHelpLabel,
+                      FFULocalizations.of(context).recoverHelpLabel!,
                       style: Theme.of(context).textTheme.caption,
                     )),
                 //const SizedBox(height: 5.0),
@@ -64,7 +64,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
                 onPressed: () => _send(context),
                 child: Row(
                   children: <Widget>[
-                    Text(FFULocalizations.of(context).sendButtonLabel),
+                    Text(FFULocalizations.of(context).sendButtonLabel!),
                   ],
                 )),
           ],
@@ -76,12 +76,12 @@ class _TroubleSignInState extends State<TroubleSignIn> {
   _send(BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     try {
-      await _auth.sendPasswordResetEmail(email: _controllerEmail.text);
+      await _auth.sendPasswordResetEmail(email: _controllerEmail!.text);
       Navigator.of(context).pop();
     } catch (exception) {
-      showErrorDialog(context, exception);
+      showErrorDialog(context, exception.toString());
     }
 
-    showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail.text));
+    showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +9,9 @@ import 'sign_up_view.dart';
 import 'utils.dart';
 
 class EmailView extends StatefulWidget {
-  final bool passwordCheck;
+  final bool? passwordCheck;
 
-  EmailView(this.passwordCheck, {Key key}) : super(key: key);
+  EmailView(this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
   _EmailViewState createState() => _EmailViewState();
@@ -21,7 +23,7 @@ class _EmailViewState extends State<EmailView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(FFULocalizations.of(context).welcome),
+          title: Text(FFULocalizations.of(context).welcome!),
           elevation: 4.0,
         ),
         body: Builder(
@@ -52,7 +54,7 @@ class _EmailViewState extends State<EmailView> {
                   onPressed: () => _connexion(context),
                   child: Row(
                     children: <Widget>[
-                      Text(FFULocalizations.of(context).nextButtonLabel),
+                      Text(FFULocalizations.of(context).nextButtonLabel!),
                     ],
                   )),
             ],
@@ -70,18 +72,18 @@ class _EmailViewState extends State<EmailView> {
       List<String> providers = await auth.fetchSignInMethodsForEmail(_controllerEmail.text);
       print(providers);
 
-      if (providers == null || providers.isEmpty) {
-        bool connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
+      if (providers.isEmpty) {
+        bool connected = await (Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return SignUpView(_controllerEmail.text, widget.passwordCheck);
-        }));
+        })) as FutureOr<bool>);
 
         if (connected) {
           Navigator.pop(context);
         }
       } else if (providers.contains('password')) {
-        bool connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
+        bool connected = await (Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return PasswordView(_controllerEmail.text);
-        }));
+        })) as FutureOr<bool>);
 
         if (connected) {
           Navigator.pop(context);
@@ -106,7 +108,7 @@ class _EmailViewState extends State<EmailView> {
         content: SingleChildScrollView(
             child: ListBody(
           children: <Widget>[
-            Text(FFULocalizations.of(context).allReadyEmailMessage(email, providerName)),
+            Text(FFULocalizations.of(context).allReadyEmailMessage(email, providerName)!),
             SizedBox(
               height: 16.0,
             ),
@@ -115,7 +117,7 @@ class _EmailViewState extends State<EmailView> {
                 return ElevatedButton(
                   child: Row(
                     children: <Widget>[
-                      Text(_providerStringToButton(p)),
+                      Text(_providerStringToButton(p)!),
                     ],
                   ),
                   onPressed: () {
@@ -130,7 +132,7 @@ class _EmailViewState extends State<EmailView> {
           TextButton(
             child: Row(
               children: <Widget>[
-                Text(FFULocalizations.of(context).cancelButtonLabel),
+                Text(FFULocalizations.of(context).cancelButtonLabel!),
               ],
             ),
             onPressed: () {
@@ -144,13 +146,13 @@ class _EmailViewState extends State<EmailView> {
 
   String _providersToString(List<String> providers) {
     return providers.map((String provider) {
-      ProvidersTypes type = stringToProvidersType(provider);
-      return providersDefinitions(context)[type]?.name;
+      ProvidersTypes? type = stringToProvidersType(provider);
+      return providersDefinitions(context)[type!]?.name;
     }).join(", ");
   }
 
-  String _providerStringToButton(String provider) {
-    ProvidersTypes type = stringToProvidersType(provider);
-    return providersDefinitions(context)[type]?.label;
+  String? _providerStringToButton(String provider) {
+    ProvidersTypes? type = stringToProvidersType(provider);
+    return providersDefinitions(context)[type!]?.label;
   }
 }
