@@ -73,19 +73,19 @@ class _EmailViewState extends State<EmailView> {
       print(providers);
 
       if (providers.isEmpty) {
-        bool connected = await (Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
+        bool? connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return SignUpView(_controllerEmail.text, widget.passwordCheck);
-        })) as FutureOr<bool>);
+        }));
 
-        if (connected) {
+        if (connected == true) {
           Navigator.pop(context);
         }
       } else if (providers.contains('password')) {
-        bool connected = await (Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
+        bool? connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return PasswordView(_controllerEmail.text);
-        })) as FutureOr<bool>);
+        }));
 
-        if (connected) {
+        if (connected == true) {
           Navigator.pop(context);
         }
       } else {
