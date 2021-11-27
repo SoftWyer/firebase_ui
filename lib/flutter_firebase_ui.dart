@@ -93,11 +93,12 @@ class _SignInScreenState extends State<SignInScreen> {
             body: Builder(
               builder: (BuildContext context) {
                 return Container(
-                    decoration: BoxDecoration(color: widget.color),
+                  decoration: BoxDecoration(color: widget.color),
+                  child: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
+                      children: [
                         _header,
                         Expanded(
                           child: Container(
@@ -120,7 +121,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         _footer,
                       ],
-                    ));
+                    ),
+                  ),
+                );
               },
             )),
       );

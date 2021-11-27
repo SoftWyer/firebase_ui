@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:firebase_ui/config.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -74,7 +75,7 @@ class _LoginViewState extends State<LoginView> {
       GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
         GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        if (googleAuth.accessToken != null) {
+        if (googleAuth.accessToken != null || googleAuth.idToken != null) {
           try {
             AuthCredential credential =
                 GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
@@ -234,8 +235,9 @@ class _LoginViewState extends State<LoginView> {
     _buttons = {
       ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google]!.copyWith(
           onSelected: _isSigningIn ? null : _handleGoogleSignIn, labelColor: _isSigningIn ? Colors.white : null),
-      ProvidersTypes.apple: providersDefinitions(context)[ProvidersTypes.apple]!
-          .copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
+      if (!kIsWeb)
+        ProvidersTypes.apple: providersDefinitions(context)[ProvidersTypes.apple]!
+            .copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
       ProvidersTypes.email: providersDefinitions(context)[ProvidersTypes.email]!
           .copyWith(onSelected: _isSigningIn ? null : _handleEmailSignIn),
       ProvidersTypes.guest: providersDefinitions(context)[ProvidersTypes.guest]!
@@ -244,12 +246,15 @@ class _LoginViewState extends State<LoginView> {
 
     print("Widget providers are ${widget.providers}");
 
-    return ListView(
-      shrinkWrap: false,
-      primary: true,
-      children: widget.providers!.map((p) {
-        return Container(padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? new Container());
-      }).toList(),
+    return Center(
+      child: ListView(
+        shrinkWrap: false,
+        primary: true,
+        children: widget.providers!.map((p) {
+          return Container(
+              padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? new Container());
+        }).toList(),
+      ),
     );
   }
 

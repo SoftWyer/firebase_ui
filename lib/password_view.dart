@@ -35,35 +35,38 @@ class _PasswordViewState extends State<PasswordView> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                //const SizedBox(height: 5.0),
-                TextField(
-                  controller: _controllerPassword,
-                  autofocus: true,
-                  onSubmitted: _submit,
-                  obscureText: true,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
-                ),
-                SizedBox(height: 16.0),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    child: InkWell(
-                        child: Text(
-                          FFULocalizations.of(context).troubleSigningInLabel!,
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        onTap: _handleLostPassword)),
-              ],
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  //const SizedBox(height: 5.0),
+                  TextField(
+                    controller: _controllerPassword,
+                    autofocus: true,
+                    onSubmitted: _submit,
+                    obscureText: true,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
+                  ),
+                  SizedBox(height: 16.0),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                          child: Text(
+                            FFULocalizations.of(context).troubleSigningInLabel!,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          onTap: _handleLostPassword)),
+                ],
+              ),
             ),
           );
         },

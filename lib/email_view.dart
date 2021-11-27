@@ -28,19 +28,22 @@ class _EmailViewState extends State<EmailView> {
         ),
         body: Builder(
           builder: (BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: _controllerEmail,
-                    autofocus: true,
-                    onSubmitted: _submit,
-                    keyboardType: TextInputType.emailAddress,
-                    autocorrect: false,
-                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                  ),
-                ],
+            return Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 800),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      controller: _controllerEmail,
+                      autofocus: true,
+                      onSubmitted: _submit,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                    ),
+                  ],
+                ),
               ),
             );
           },

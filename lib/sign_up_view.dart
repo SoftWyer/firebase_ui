@@ -61,49 +61,52 @@ class _SignUpViewState extends State<SignUpView> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              children: <Widget>[
-                const SizedBox(height: 8.0),
-                Text(
-                  'After saving, check your email for a password reset link and then log in again',
-                ),
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  onSubmitted: _submit,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                const SizedBox(height: 8.0),
-                TextField(
-                  controller: _controllerDisplayName,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  onChanged: _checkValid,
-                  onSubmitted: _submitDisplayName,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
-                ),
-                const SizedBox(height: 8.0),
-                // TextField(
-                //   controller: _controllerPassword,
-                //   obscureText: true,
-                //   autocorrect: false,
-                //   onSubmitted: _submit,
-                //   focusNode: _focusPassword,
-                //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
-                // ),
-                // !widget.passwordCheck
-                //     ? Container()
-                //     : TextField(
-                //         controller: _controllerCheckPassword,
-                //         obscureText: true,
-                //         autocorrect: false,
-                //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
-                //       ),
-              ],
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: <Widget>[
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'After saving, check your email for a password reset link and then log in again',
+                  ),
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    onSubmitted: _submit,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    controller: _controllerDisplayName,
+                    autofocus: true,
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    onChanged: _checkValid,
+                    onSubmitted: _submitDisplayName,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
+                  ),
+                  const SizedBox(height: 8.0),
+                  // TextField(
+                  //   controller: _controllerPassword,
+                  //   obscureText: true,
+                  //   autocorrect: false,
+                  //   onSubmitted: _submit,
+                  //   focusNode: _focusPassword,
+                  //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
+                  // ),
+                  // !widget.passwordCheck
+                  //     ? Container()
+                  //     : TextField(
+                  //         controller: _controllerCheckPassword,
+                  //         obscureText: true,
+                  //         autocorrect: false,
+                  //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
+                  //       ),
+                ],
+              ),
             ),
           );
         },

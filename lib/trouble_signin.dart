@@ -32,25 +32,28 @@ class _TroubleSignInState extends State<TroubleSignIn> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                SizedBox(height: 16.0),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      FFULocalizations.of(context).recoverHelpLabel!,
-                      style: Theme.of(context).textTheme.caption,
-                    )),
-                //const SizedBox(height: 5.0),
-              ],
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  SizedBox(height: 16.0),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        FFULocalizations.of(context).recoverHelpLabel!,
+                        style: Theme.of(context).textTheme.caption,
+                      )),
+                  //const SizedBox(height: 5.0),
+                ],
+              ),
             ),
           );
         },
