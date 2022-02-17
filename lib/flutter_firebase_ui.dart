@@ -14,7 +14,7 @@ export 'config.dart';
 export 'utils.dart';
 
 class SignInScreen extends StatefulWidget {
-  SignInScreen(
+  const SignInScreen(
       {Key? key,
       this.title,
       this.header,
@@ -46,18 +46,20 @@ class SignInScreen extends StatefulWidget {
   final Map<String, Config>? config;
 
   @override
-  _SignInScreenState createState() => new _SignInScreenState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Widget get _header => widget.header ?? SizedBox.shrink();
-  Widget get _footer => widget.footer ?? SizedBox.shrink();
+  Widget get _header => widget.header ?? const SizedBox.shrink();
+  Widget get _footer => widget.footer ?? const SizedBox.shrink();
 
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
   Future<List<ProvidersTypes>> _providers() async {
-    print("Determining providers ${widget.providers}");
+    if (kDebugMode) {
+      print('Determining providers ${widget.providers}');
+    }
 
     List<ProvidersTypes> validProviders = List.from(widget.providers ?? [ProvidersTypes.email]);
 
@@ -66,9 +68,9 @@ class _SignInScreenState extends State<SignInScreen> {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
       int v = int.tryParse(info.systemVersion.split(r'.')[0])!;
-      print("iOS major version is $v");
+      print('iOS major version is $v');
       if (v < 13) {
-        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
+        print('Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}');
         validProviders.remove(ProvidersTypes.apple);
       }
     }
@@ -102,13 +104,13 @@ class _SignInScreenState extends State<SignInScreen> {
                         _header,
                         Expanded(
                           child: Container(
-                            constraints: BoxConstraints(maxWidth: 300),
+                            constraints: const BoxConstraints(maxWidth: 300),
                             padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                             child: FutureBuilder<List<ProvidersTypes>>(
                                 future: _providers(),
-                                initialData: [],
+                                initialData: const [],
                                 builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
-                                  print("SignIn Snapshot is $snapshot");
+                                  print('SignIn Snapshot is $snapshot');
 
                                   return LoginView(
                                     providers: snapshot.data,

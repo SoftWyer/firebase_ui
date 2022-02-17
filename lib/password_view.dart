@@ -8,7 +8,7 @@ import 'utils.dart';
 class PasswordView extends StatefulWidget {
   final String email;
 
-  PasswordView(this.email, {Key? key}) : super(key: key);
+  const PasswordView(this.email, {Key? key}) : super(key: key);
 
   @override
   _PasswordViewState createState() => _PasswordViewState();
@@ -56,7 +56,7 @@ class _PasswordViewState extends State<PasswordView> {
                     autocorrect: false,
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Container(
                       alignment: Alignment.centerLeft,
                       child: InkWell(
@@ -94,7 +94,7 @@ class _PasswordViewState extends State<PasswordView> {
   }
 
   _handleLostPassword() {
-    Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (BuildContext context) {
       return TroubleSignIn(_controllerEmail!.text);
     }));
   }

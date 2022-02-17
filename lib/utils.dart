@@ -29,14 +29,16 @@ class ButtonDescription extends StatelessWidget {
   final String name;
   final VoidCallback? onSelected;
 
-  const ButtonDescription(
-      {required this.label,
-      required this.name,
-      this.logo,
-      this.icon,
-      this.onSelected,
-      this.labelColor = Colors.grey,
-      this.color = Colors.white});
+  const ButtonDescription({
+    Key? key,
+    required this.label,
+    required this.name,
+    this.logo,
+    this.icon,
+    this.onSelected,
+    this.labelColor = Colors.grey,
+    this.color = Colors.white,
+  }) : super(key: key);
 
   ButtonDescription copyWith({
     String? label,
@@ -79,39 +81,39 @@ class ButtonDescription extends StatelessWidget {
             ),
           ],
         ),
-        onPressed: onSelected ?? null);
+        onPressed: onSelected);
   }
 }
 
 Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
       ProvidersTypes.google: ButtonDescription(
           color: Theme.of(context).cardColor,
-          logo: "go-logo.png",
+          logo: 'go-logo.png',
           label: FFULocalizations.of(context).signInGoogle,
-          name: "Google",
+          name: 'Google',
           labelColor: Colors.black87),
       ProvidersTypes.apple: ButtonDescription(
           color: Colors.black,
-          logo: "apple.png",
+          logo: 'apple.png',
           label: FFULocalizations.of(context).signInApple,
-          name: "Apple",
+          name: 'Apple',
           labelColor: Colors.white),
       ProvidersTypes.email: ButtonDescription(
           color: const Color.fromRGBO(219, 68, 55, 1.0),
-          logo: "email-logo.png",
+          logo: 'email-logo.png',
           label: FFULocalizations.of(context).signInEmail,
-          name: "Email",
+          name: 'Email',
           labelColor: Colors.white),
       ProvidersTypes.guest: ButtonDescription(
           color: const Color.fromRGBO(244, 180, 0, 1.0),
           icon: Icons.person,
           label: FFULocalizations.of(context).signInGuest,
-          name: "guest",
+          name: 'guest',
           labelColor: Colors.white),
     };
 
-Future<Null> showErrorDialog(BuildContext context, String? message, {String? title, bool barrierDismissible = false}) {
-  return showDialog<Null>(
+Future<void> showErrorDialog(BuildContext context, String? message, {String? title, bool barrierDismissible = false}) {
+  return showDialog<void>(
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (BuildContext context) => AlertDialog(

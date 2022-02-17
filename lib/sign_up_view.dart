@@ -20,7 +20,7 @@ class SignUpView extends StatefulWidget {
   final String email;
   final bool? passwordCheck;
 
-  SignUpView(this.email, this.passwordCheck, {Key? key}) : super(key: key);
+  const SignUpView(this.email, this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
   _SignUpViewState createState() => _SignUpViewState();
@@ -68,7 +68,7 @@ class _SignUpViewState extends State<SignUpView> {
               child: ListView(
                 children: <Widget>[
                   const SizedBox(height: 8.0),
-                  Text(
+                  const Text(
                     'After saving, check your email for a password reset link and then log in again',
                   ),
                   TextField(
@@ -163,7 +163,7 @@ class _SignUpViewState extends State<SignUpView> {
 
         Navigator.pop(context, true);
       } catch (e) {
-        String msg = "An error occurred: $e";
+        String msg = 'An error occurred: $e';
         print(msg);
         // showErrorDialog(context, msg);
       }

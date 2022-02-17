@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
-import 'package:firebase_ui/config.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
 import 'email_view.dart';
-import 'utils.dart';
 
 class LoginView extends StatefulWidget {
   final List<ProvidersTypes>? providers;
@@ -24,13 +21,13 @@ class LoginView extends StatefulWidget {
 
   LoginView(
       {Key? key, required this.providers, this.passwordCheck, required this.bottomPadding, Map<String, Config>? config})
-      : this.config = config ?? {},
+      : config = config ?? {},
         super(key: key) {
-    print("Widget providers are ${this.providers}");
+    print('Widget providers are $providers');
   }
 
   @override
-  _LoginViewState createState() => new _LoginViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -44,8 +41,8 @@ class _LoginViewState extends State<LoginView> {
   _handleEmailSignIn() async {
     _signingIn(true);
     try {
-      String? value = await Navigator.of(context).push(new MaterialPageRoute<String>(builder: (BuildContext context) {
-        return new EmailView(widget.passwordCheck);
+      String? value = await Navigator.of(context).push(MaterialPageRoute<String>(builder: (BuildContext context) {
+        return EmailView(widget.passwordCheck);
       }));
 
       if (value != null) {
@@ -108,10 +105,10 @@ class _LoginViewState extends State<LoginView> {
 
   _handleAppleSignIn() async {
     assert(widget.config[AppleConfig.configName] != null,
-        "You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}");
+        'You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}');
     _signingIn(true);
 
-    var pr = new ProgressDialog(context: context);
+    var pr = ProgressDialog(context: context);
 
     try {
       AppleConfig appleConfig = widget.config[AppleConfig.configName] as AppleConfig;
@@ -195,7 +192,7 @@ class _LoginViewState extends State<LoginView> {
       _user = authResult.user;
       print(_user);
     } catch (e) {
-      print("Exception");
+      print('Exception');
       print(e);
       // if (e.code != AuthorizationErrorCode.canceled) {
       showErrorDialog(context, e.toString());
@@ -244,15 +241,14 @@ class _LoginViewState extends State<LoginView> {
           .copyWith(onSelected: _isSigningIn ? null : _handleGuestSignIn),
     };
 
-    print("Widget providers are ${widget.providers}");
+    print('Widget providers are ${widget.providers}');
 
     return Center(
       child: ListView(
         shrinkWrap: false,
         primary: true,
         children: widget.providers!.map((p) {
-          return Container(
-              padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? new Container());
+          return Container(padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? Container());
         }).toList(),
       ),
     );

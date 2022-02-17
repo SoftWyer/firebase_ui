@@ -57,14 +57,14 @@ class FFULocalizations {
   String? get errorOccurred => _translationBundle.errorOccurred;
 
   static Future<FFULocalizations> load(Locale locale) {
-    return new SynchronousFuture<FFULocalizations>(new FFULocalizations(locale));
+    return SynchronousFuture<FFULocalizations>(FFULocalizations(locale));
   }
 
   static FFULocalizations of(BuildContext context) {
-    return Localizations.of<FFULocalizations>(context, FFULocalizations) ?? new _DefaultFFULocalizations();
+    return Localizations.of<FFULocalizations>(context, FFULocalizations) ?? _DefaultFFULocalizations();
   }
 
-  static const LocalizationsDelegate<FFULocalizations> delegate = const _FFULocalizationsDelegate();
+  static const LocalizationsDelegate<FFULocalizations> delegate = _FFULocalizationsDelegate();
 
   String? allReadyEmailMessage(String email, String providerName) =>
       _translationBundle.allReadyEmailMessage(email, providerName);
@@ -79,7 +79,7 @@ class _DefaultFFULocalizations extends FFULocalizations {
 class _FFULocalizationsDelegate extends LocalizationsDelegate<FFULocalizations> {
   const _FFULocalizationsDelegate();
 
-  static const List<String> _supportedLanguages = const <String>[
+  static const List<String> _supportedLanguages = <String>[
     'en', // English
     'fr', // French
     'de', // Deutsch

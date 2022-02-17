@@ -79,11 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
             'com.about.you',
           )
         },
-        title: "Demo",
+        title: 'Demo',
         header: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Text("Demo"),
+            child: Text('Demo'),
           ),
         ),
         showBar: true,
@@ -123,7 +123,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
-        title: Text("Bienvenue"),
+        title: Text('Bienvenue'),
         elevation: 4.0,
       ),
       body: Container(
@@ -136,7 +136,7 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Welcome,"),
+                  Text('Welcome,'),
                 ],
               ),
               SizedBox(
@@ -146,7 +146,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: 32.0,
               ),
-              ElevatedButton(child: Text("DECONNEXION"), onPressed: _logout)
+              ElevatedButton(child: Text('DECONNEXION'), onPressed: _logout)
             ],
           )));
 

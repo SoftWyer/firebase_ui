@@ -7,7 +7,7 @@ import 'utils.dart';
 class TroubleSignIn extends StatefulWidget {
   final String email;
 
-  TroubleSignIn(this.email, {Key? key}) : super(key: key);
+  const TroubleSignIn(this.email, {Key? key}) : super(key: key);
 
   @override
   _TroubleSignInState createState() => _TroubleSignInState();
@@ -44,7 +44,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
                     autocorrect: false,
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Container(
                       alignment: Alignment.centerLeft,
                       child: Text(

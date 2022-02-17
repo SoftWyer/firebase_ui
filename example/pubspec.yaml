@@ -20,7 +20,7 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
-  intl: ^0.17.0
+  #intl: ^0.17.0
 
 
 # For information on the generic Dart part of this file, see the

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +9,7 @@ import 'utils.dart';
 class EmailView extends StatefulWidget {
   final bool? passwordCheck;
 
-  EmailView(this.passwordCheck, {Key? key}) : super(key: key);
+  const EmailView(this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
   _EmailViewState createState() => _EmailViewState();
@@ -112,7 +110,7 @@ class _EmailViewState extends State<EmailView> {
             child: ListBody(
           children: <Widget>[
             Text(FFULocalizations.of(context).allReadyEmailMessage(email, providerName)!),
-            SizedBox(
+            const SizedBox(
               height: 16.0,
             ),
             Column(
@@ -151,7 +149,7 @@ class _EmailViewState extends State<EmailView> {
     return providers.map((String provider) {
       ProvidersTypes? type = stringToProvidersType(provider);
       return providersDefinitions(context)[type!]?.name;
-    }).join(", ");
+    }).join(', ');
   }
 
   String? _providerStringToButton(String provider) {
