@@ -27,7 +27,7 @@ class LoginView extends StatefulWidget {
   }
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  State<StatefulWidget> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -80,7 +80,9 @@ class _LoginViewState extends State<LoginView> {
             _user = authResult.user;
             print(_user);
           } catch (e) {
-            showErrorDialog(context, e.toString());
+            if (mounted) {
+              showErrorDialog(context, e.toString());
+            }
           }
         }
       }

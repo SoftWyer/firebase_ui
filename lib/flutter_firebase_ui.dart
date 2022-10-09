@@ -46,7 +46,7 @@ class SignInScreen extends StatefulWidget {
   final Map<String, Config>? config;
 
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  State<StatefulWidget> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
@@ -61,16 +61,20 @@ class _SignInScreenState extends State<SignInScreen> {
       print('Determining providers ${widget.providers}');
     }
 
-    List<ProvidersTypes> validProviders = List.from(widget.providers ?? [ProvidersTypes.email]);
+    List<ProvidersTypes> validProviders =
+        List.from(widget.providers ?? [ProvidersTypes.email]);
 
     // Apple sign in is only available with iOS 13+, so we check
-    if (!kIsWeb && Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
+    if (!kIsWeb &&
+        Platform.isIOS &&
+        validProviders.contains(ProvidersTypes.apple)) {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
       int v = int.tryParse(info.systemVersion.split(r'.')[0])!;
       print('iOS major version is $v');
       if (v < 13) {
-        print('Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}');
+        print(
+            'Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}');
         validProviders.remove(ProvidersTypes.apple);
       }
     }
@@ -105,11 +109,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         Expanded(
                           child: Container(
                             constraints: const BoxConstraints(maxWidth: 300),
-                            padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: widget.horizontalPadding),
                             child: FutureBuilder<List<ProvidersTypes>>(
                                 future: _providers(),
                                 initialData: const [],
-                                builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
+                                builder: (context,
+                                    AsyncSnapshot<List<ProvidersTypes>>
+                                        snapshot) {
                                   print('SignIn Snapshot is $snapshot');
 
                                   return LoginView(

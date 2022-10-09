@@ -12,7 +12,7 @@ class EmailView extends StatefulWidget {
   const EmailView(this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
-  _EmailViewState createState() => _EmailViewState();
+  State<StatefulWidget> createState() => _EmailViewState();
 }
 
 class _EmailViewState extends State<EmailView> {
@@ -73,12 +73,12 @@ class _EmailViewState extends State<EmailView> {
       List<String> providers = await auth.fetchSignInMethodsForEmail(_controllerEmail.text);
       print(providers);
 
-      if (providers.isEmpty) {
+      if (providers.isEmpty && mounted) {
         bool? connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return SignUpView(_controllerEmail.text, widget.passwordCheck);
         }));
 
-        if (connected == true) {
+        if (connected == true && mounted) {
           Navigator.pop(context);
         }
       } else if (providers.contains('password')) {
@@ -86,12 +86,12 @@ class _EmailViewState extends State<EmailView> {
           return PasswordView(_controllerEmail.text);
         }));
 
-        if (connected == true) {
+        if (connected == true && mounted) {
           Navigator.pop(context);
         }
       } else {
         String provider = await _showDialogSelectOtherProvider(_controllerEmail.text, providers);
-        if (provider.isNotEmpty) {
+        if (provider.isNotEmpty && mounted) {
           Navigator.pop(context, provider);
         }
       }

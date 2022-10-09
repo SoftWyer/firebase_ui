@@ -11,7 +11,7 @@ class PasswordView extends StatefulWidget {
   const PasswordView(this.email, {Key? key}) : super(key: key);
 
   @override
-  _PasswordViewState createState() => _PasswordViewState();
+  State<StatefulWidget> createState() => _PasswordViewState();
 }
 
 class _PasswordViewState extends State<PasswordView> {
@@ -60,11 +60,11 @@ class _PasswordViewState extends State<PasswordView> {
                   Container(
                       alignment: Alignment.centerLeft,
                       child: InkWell(
+                          onTap: _handleLostPassword,
                           child: Text(
                             FFULocalizations.of(context).troubleSigningInLabel!,
                             style: Theme.of(context).textTheme.caption,
-                          ),
-                          onTap: _handleLostPassword)),
+                          ))),
                 ],
               ),
             ),
@@ -100,12 +100,12 @@ class _PasswordViewState extends State<PasswordView> {
   }
 
   _connexion(BuildContext context) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
     UserCredential authResult;
     User? user;
     try {
       authResult =
-          await _auth.signInWithEmailAndPassword(email: _controllerEmail!.text, password: _controllerPassword!.text);
+          await auth.signInWithEmailAndPassword(email: _controllerEmail!.text, password: _controllerPassword!.text);
       user = authResult.user;
       print(user);
     } catch (exception) {
@@ -115,7 +115,7 @@ class _PasswordViewState extends State<PasswordView> {
     }
 
     if (user != null) {
-      if (user.emailVerified) {
+      if (user.emailVerified && mounted) {
         Navigator.pop(context, true);
       } else {
         showErrorDialog(context, FFULocalizations.of(context).checkEmailLink);

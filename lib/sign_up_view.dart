@@ -23,7 +23,7 @@ class SignUpView extends StatefulWidget {
   const SignUpView(this.email, this.passwordCheck, {Key? key}) : super(key: key);
 
   @override
-  _SignUpViewState createState() => _SignUpViewState();
+  State<StatefulWidget> createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
@@ -145,9 +145,9 @@ class _SignUpViewState extends State<SignUpView> {
 
     String email = _controllerEmail!.text;
 
-    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(
         email: email,
         password: _randomString(16),
       );
@@ -155,13 +155,15 @@ class _SignUpViewState extends State<SignUpView> {
       try {
         await user.updateDisplayName(_controllerDisplayName!.text);
 
-        _auth.sendPasswordResetEmail(
+        auth.sendPasswordResetEmail(
           email: email,
         );
 
-        _auth.signOut();
+        auth.signOut();
 
-        Navigator.pop(context, true);
+        if (mounted) {
+          Navigator.pop(context, true);
+        }
       } catch (e) {
         String msg = 'An error occurred: $e';
         print(msg);

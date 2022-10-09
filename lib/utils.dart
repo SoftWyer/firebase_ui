@@ -65,6 +65,7 @@ class ButtonDescription extends StatelessWidget {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(color),
         ),
+        onPressed: onSelected,
         child: Row(
           children: <Widget>[
             Container(
@@ -80,8 +81,7 @@ class ButtonDescription extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        onPressed: onSelected);
+        ));
   }
 }
 

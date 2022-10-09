@@ -10,7 +10,7 @@ class TroubleSignIn extends StatefulWidget {
   const TroubleSignIn(this.email, {Key? key}) : super(key: key);
 
   @override
-  _TroubleSignInState createState() => _TroubleSignInState();
+  State<StatefulWidget> createState() => _TroubleSignInState();
 }
 
 class _TroubleSignInState extends State<TroubleSignIn> {
@@ -77,14 +77,18 @@ class _TroubleSignInState extends State<TroubleSignIn> {
   }
 
   _send(BuildContext context) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      await _auth.sendPasswordResetEmail(email: _controllerEmail!.text);
-      Navigator.of(context).pop();
+      await auth.sendPasswordResetEmail(email: _controllerEmail!.text);
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
     } catch (exception) {
       showErrorDialog(context, exception.toString());
     }
 
-    showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
+    if (mounted) {
+      showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
+    }
   }
 }
