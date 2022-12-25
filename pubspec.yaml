@@ -4,7 +4,7 @@ version: 1.0.10
 homepage: https://github.com/Maliffic/firebase_ui
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -14,12 +14,12 @@ dependencies:
 
   crypto: ^3.0.0
   device_info: ^2.0.0
-  firebase_auth: ^4.0.2
-  google_sign_in: ^5.0.0
+  firebase_auth: ^4.2.3
+  google_sign_in: ^5.4.2
   http: ^0.13.0
   # flutter_facebook_login: ^3.0.0
   sn_progress_dialog: ^1.0.3
-  sign_in_with_apple: ^4.1.0
+  sign_in_with_apple: ^4.3.0
 
 dev_dependencies:
   flutter_test:
