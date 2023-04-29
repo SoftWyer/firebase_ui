@@ -232,8 +232,8 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     _buttons = {
-      ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google]!.copyWith(
-          onSelected: _isSigningIn ? null : _handleGoogleSignIn, labelColor: _isSigningIn ? Colors.white : null),
+      ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google]!
+          .copyWith(onSelected: _isSigningIn ? null : _handleGoogleSignIn, labelColor: Colors.black),
       if (!kIsWeb)
         ProvidersTypes.apple: providersDefinitions(context)[ProvidersTypes.apple]!
             .copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
@@ -258,9 +258,6 @@ class _LoginViewState extends State<LoginView> {
 
   void _followProvider(String value) {
     ProvidersTypes? provider = stringToProvidersType(value);
-    // if (provider == ProvidersTypes.facebook) {
-    //   _handleFacebookSignin();
-    // } else
     if (provider == ProvidersTypes.google) {
       _handleGoogleSignIn();
     }

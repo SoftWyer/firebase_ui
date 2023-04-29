@@ -87,7 +87,7 @@ class ButtonDescription extends StatelessWidget {
 
 Map<ProvidersTypes, ButtonDescription> providersDefinitions(BuildContext context) => {
       ProvidersTypes.google: ButtonDescription(
-          color: Theme.of(context).cardColor,
+          color: Colors.white,
           logo: 'go-logo.png',
           label: FFULocalizations.of(context).signInGoogle,
           name: 'Google',
