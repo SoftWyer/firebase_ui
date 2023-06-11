@@ -49,7 +49,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         FFULocalizations.of(context).recoverHelpLabel!,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       )),
                   //const SizedBox(height: 5.0),
                 ],

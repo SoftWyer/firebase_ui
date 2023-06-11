@@ -63,7 +63,7 @@ class _PasswordViewState extends State<PasswordView> {
                           onTap: _handleLostPassword,
                           child: Text(
                             FFULocalizations.of(context).troubleSigningInLabel!,
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ))),
                 ],
               ),
