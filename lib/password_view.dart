@@ -8,7 +8,7 @@ import 'utils.dart';
 class PasswordView extends StatefulWidget {
   final String email;
 
-  const PasswordView(this.email, {Key? key}) : super(key: key);
+  const PasswordView(this.email, {super.key});
 
   @override
   State<StatefulWidget> createState() => _PasswordViewState();
@@ -110,14 +110,16 @@ class _PasswordViewState extends State<PasswordView> {
       print(user);
     } catch (exception) {
       //TODO improve errors catching
-      String? msg = FFULocalizations.of(context).passwordInvalidMessage;
-      showErrorDialog(context, msg);
+      if (context.mounted) {
+        String? msg = FFULocalizations.of(context).passwordInvalidMessage;
+        showErrorDialog(context, msg);
+      }
     }
 
     if (user != null) {
       if (user.emailVerified && mounted) {
         Navigator.pop(context, true);
-      } else {
+      } else if (context.mounted) {
         showErrorDialog(context, FFULocalizations.of(context).checkEmailLink);
       }
     }

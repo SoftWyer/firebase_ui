@@ -20,9 +20,12 @@ class LoginView extends StatefulWidget {
   final Map<String, Config> config;
 
   LoginView(
-      {Key? key, required this.providers, this.passwordCheck, required this.bottomPadding, Map<String, Config>? config})
-      : config = config ?? {},
-        super(key: key) {
+      {super.key,
+      required this.providers,
+      this.passwordCheck,
+      required this.bottomPadding,
+      Map<String, Config>? config})
+      : config = config ?? {} {
     print('Widget providers are $providers');
   }
 
@@ -60,7 +63,9 @@ class _LoginViewState extends State<LoginView> {
       _user = authResult.user;
       print(_user);
     } catch (e) {
-      showErrorDialog(context, e.toString());
+      if (context.mounted) {
+        showErrorDialog(context, e.toString());
+      }
     } finally {
       _signingIn(false);
     }
@@ -197,7 +202,9 @@ class _LoginViewState extends State<LoginView> {
       print('Exception');
       print(e);
       // if (e.code != AuthorizationErrorCode.canceled) {
-      showErrorDialog(context, e.toString());
+      if (context.mounted) {
+        showErrorDialog(context, e.toString());
+      }
       // }
     } finally {
       pr.close();

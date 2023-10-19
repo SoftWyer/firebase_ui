@@ -15,7 +15,7 @@ export 'utils.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen(
-      {Key? key,
+      {super.key,
       this.title,
       this.header,
       this.footer,
@@ -27,8 +27,7 @@ class SignInScreen extends StatefulWidget {
       required this.showBar,
       required this.avoidBottomInset,
       required this.bottomPadding,
-      required this.horizontalPadding})
-      : super(key: key);
+      required this.horizontalPadding});
 
   final String? title;
   final Widget? header;

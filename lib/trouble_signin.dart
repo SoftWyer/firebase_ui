@@ -7,7 +7,7 @@ import 'utils.dart';
 class TroubleSignIn extends StatefulWidget {
   final String email;
 
-  const TroubleSignIn(this.email, {Key? key}) : super(key: key);
+  const TroubleSignIn(this.email, {super.key});
 
   @override
   State<StatefulWidget> createState() => _TroubleSignInState();
@@ -84,7 +84,9 @@ class _TroubleSignInState extends State<TroubleSignIn> {
         Navigator.of(context).pop();
       }
     } catch (exception) {
-      showErrorDialog(context, exception.toString());
+      if (context.mounted) {
+        showErrorDialog(context, exception.toString());
+      }
     }
 
     if (mounted) {

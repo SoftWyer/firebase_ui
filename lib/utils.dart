@@ -30,7 +30,7 @@ class ButtonDescription extends StatelessWidget {
   final VoidCallback? onSelected;
 
   const ButtonDescription({
-    Key? key,
+    super.key,
     required this.label,
     required this.name,
     this.logo,
@@ -38,7 +38,7 @@ class ButtonDescription extends StatelessWidget {
     this.onSelected,
     this.labelColor = Colors.grey,
     this.color = Colors.white,
-  }) : super(key: key);
+  });
 
   ButtonDescription copyWith({
     String? label,

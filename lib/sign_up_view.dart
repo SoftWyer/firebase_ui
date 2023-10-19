@@ -20,7 +20,7 @@ class SignUpView extends StatefulWidget {
   final String email;
   final bool? passwordCheck;
 
-  const SignUpView(this.email, this.passwordCheck, {Key? key}) : super(key: key);
+  const SignUpView(this.email, this.passwordCheck, {super.key});
 
   @override
   State<StatefulWidget> createState() => _SignUpViewState();
@@ -172,8 +172,10 @@ class _SignUpViewState extends State<SignUpView> {
     } on PlatformException catch (e) {
       print(e);
       //TODO improve errors catching
-      String? msg = e.message;
-      showErrorDialog(context, msg);
+      if (context.mounted) {
+        String? msg = e.message;
+        showErrorDialog(context, msg);
+      }
     }
   }
 
