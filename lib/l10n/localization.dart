@@ -48,7 +48,6 @@ class FFULocalizations {
 
   String? get passwordLengthMessage => _translationBundle.passwordLengthMessage;
 
-  String? get signInFacebook => _translationBundle.signInFacebook;
   String? get signInGoogle => _translationBundle.signInGoogle;
   String? get signInApple => _translationBundle.signInApple;
   String? get signInEmail => _translationBundle.signInEmail;
@@ -85,6 +84,7 @@ class _FFULocalizationsDelegate extends LocalizationsDelegate<FFULocalizations> 
     'de', // Deutsch
     'pt', // Portuguese
     'es', // Spanish
+    'ja', // Japanese
   ];
 
   @override

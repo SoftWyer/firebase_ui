@@ -78,10 +78,8 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () {
-          return Future.value(widget.allowBackAction);
-        },
+  Widget build(BuildContext context) => PopScope(
+        canPop: widget.allowBackAction,
         child: Scaffold(
             appBar: widget.showBar
                 ? AppBar(

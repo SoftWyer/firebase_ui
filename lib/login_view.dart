@@ -257,7 +257,12 @@ class _LoginViewState extends State<LoginView> {
         shrinkWrap: false,
         primary: true,
         children: widget.providers!.map((p) {
-          return Container(padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? Container());
+          return Container(
+              padding: EdgeInsets.only(
+                bottom: widget.bottomPadding,
+                top: p == ProvidersTypes.guest ? 20 : 0,
+              ),
+              child: _buttons[p] ?? Container());
         }).toList(),
       ),
     );

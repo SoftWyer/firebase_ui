@@ -42,7 +42,6 @@ class TranslationBundle {
 
   String? get passwordLengthMessage => parent?.passwordLengthMessage;
 
-  String? get signInFacebook => parent?.signInFacebook;
   String? get signInGoogle => parent?.signInGoogle;
   String? get signInApple => parent?.signInApple;
   String? get signInEmail => parent?.signInEmail;
@@ -122,9 +121,6 @@ Connectez-vous avec $providerName pour continuer.''';
 
   @override
   String get passwordLengthMessage => r'Le mot de passe doit comporter 6 caractères ou plus';
-
-  @override
-  String get signInFacebook => r'Connexion avec Facebook';
 
   @override
   String get signInGoogle => r'Connexion avec Google';
@@ -209,9 +205,6 @@ Sign in with $providerName to continue.''';
   String get passwordLengthMessage => r'The password must be 6 characters long or more';
 
   @override
-  String get signInFacebook => r'Sign in with Facebook';
-
-  @override
   String get signInGoogle => r'Sign in with Google';
 
   @override
@@ -292,9 +285,6 @@ Mit $providerName anmelden um fortzufarhen.''';
 
   @override
   String get passwordLengthMessage => r'Das Passwort muss 6 oder mehr Zeichen haben';
-
-  @override
-  String get signInFacebook => r'Mit Facebook anmelden';
 
   @override
   String get signInGoogle => r'Mit Google anmelden';
@@ -380,9 +370,6 @@ Faça login com o $providerName para continuar.''';
   String get passwordLengthMessage => r'A senha deve ter pelo menos 6 caracteres';
 
   @override
-  String get signInFacebook => r'Login com o Facebook';
-
-  @override
   String get signInGoogle => r'Login com o Google';
 
   @override
@@ -464,9 +451,6 @@ Entra con $providerName para continuar.''';
   String get passwordLengthMessage => r'La contraseña debe tener 6 o más caracteres';
 
   @override
-  String get signInFacebook => r'Entrar con Facebook';
-
-  @override
   String get signInGoogle => r'Entrar con Google';
 
   @override
@@ -477,6 +461,86 @@ Entra con $providerName para continuar.''';
 
   @override
   String get signInGuest => r'Continua como invitado';
+}
+
+// ignore: camel_case_types
+class _Bundle_ja extends TranslationBundle {
+  const _Bundle_ja() : super(null);
+
+  @override
+  String get welcome => r'ようこそ';
+  @override
+  String get emailLabel => r'メールアドレス';
+  @override
+  String get passwordLabel => r'パスワード';
+
+  @override
+  String get passwordCheckLabel => r'パスワードを確認';
+
+  @override
+  String get checkEmailLink => r'パスワードリセットリンクのメールをご確認ください';
+
+  @override
+  String get passwordCheckError => r'パスワードが一致しません';
+
+  @override
+  String get nextButtonLabel => r'次へ';
+  @override
+  String get cancelButtonLabel => r'キャンセル';
+  @override
+  String get signInLabel => r'サインイン';
+  @override
+  String get signInTitle => r'サインイン';
+
+  @override
+  String get saveLabel => r'保存';
+
+  @override
+  String get troubleSigningInLabel => 'サインインに問題がありますか？';
+
+  @override
+  String get passwordInvalidMessage => 'パスワードが無効であるか、ユーザーがパスワードを設定していません。';
+
+  @override
+  String get recoverPasswordTitle => r'パスワードを復元';
+
+  @override
+  String get recoverHelpLabel => r'このメールアドレスに、パスワードのリセット方法を説明した手順を送信します';
+
+  @override
+  String get sendButtonLabel => r'送信';
+
+  @override
+  String get nameLabel => r'名前と姓';
+
+  @override
+  String get errorOccurred => r'エラーが発生しました';
+
+  @override
+  allReadyEmailMessage(String email, String providerName) {
+    return '''すでに $email を使用しています。
+    続行するには、$providerName でサインインしてください。''';
+  }
+
+  @override
+  recoverDialog(String email) {
+    return 'に送信された手順に従ってパスワードを復元してください';
+  }
+
+  @override
+  String get passwordLengthMessage => r'パスワードは 6 文字以上でなければなりません';
+
+  @override
+  String get signInGoogle => r'Google でサインイン';
+
+  @override
+  String get signInApple => r'Apple でサインイン';
+
+  @override
+  String get signInEmail => r'メールでサインイン';
+
+  @override
+  String get signInGuest => r'ゲストとして続行';
 }
 
 TranslationBundle translationBundleForLocale(Locale locale) {
@@ -491,6 +555,8 @@ TranslationBundle translationBundleForLocale(Locale locale) {
       return const _Bundle_pt();
     case 'es':
       return const _Bundle_es();
+    case 'ja':
+      return const _Bundle_ja();
   }
   return const _Bundle_en();
 }
