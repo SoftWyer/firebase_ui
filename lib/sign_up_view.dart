@@ -161,7 +161,7 @@ class _SignUpViewState extends State<SignUpView> {
 
         auth.signOut();
 
-        if (mounted) {
+        if (context.mounted) {
           Navigator.pop(context, true);
         }
       } catch (e) {

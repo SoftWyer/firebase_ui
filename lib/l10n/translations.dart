@@ -217,6 +217,87 @@ Sign in with $providerName to continue.''';
   String get signInGuest => r'Continue as a guest';
 }
 
+class _Bundle_nl extends TranslationBundle {
+  const _Bundle_nl() : super(null);
+
+  @override
+  String get welcome => r'Welkom';
+  @override
+  String get signUpTitle => 'Registreer nieuwe gebruiker';
+  @override
+  String get emailLabel => r'E-mailadres';
+  @override
+  String get passwordLabel => r'Wachtwoord';
+
+  @override
+  String get passwordCheckLabel => r'Bevestig wachtwoord';
+
+  @override
+  String get checkEmailLink => r'Controleer uw e-mail op een link om uw wachtwoord te resetten';
+
+  @override
+  String get passwordCheckError => r'De wachtwoorden zijn verschillend';
+
+  @override
+  String get nextButtonLabel => r'VOLGENDE';
+  @override
+  String get cancelButtonLabel => r'ANNULEREN';
+  @override
+  String get signInLabel => r'INLOGGEN';
+  @override
+  String get signInTitle => r'Inloggen';
+
+  @override
+  String get saveLabel => r'OPSLAAN';
+
+  @override
+  String get troubleSigningInLabel => 'Problemen met inloggen?';
+
+  @override
+  String get passwordInvalidMessage => 'Het wachtwoord is ongeldig of de gebruiker heeft geen wachtwoord ingesteld.';
+
+  @override
+  String get recoverPasswordTitle => r' Wachtwoord herstellen';
+
+  @override
+  String get recoverHelpLabel =>
+      r'Ontvang instructies via dit e-mailadres die uitleggen hoe u uw wachtwoord kunt resetten';
+
+  @override
+  String get sendButtonLabel => r'VERZENDEN';
+
+  @override
+  String get nameLabel => r'Voornaam & Achternaam';
+
+  @override
+  String get errorOccurred => r'Er is een fout opgetreden';
+
+  @override
+  allReadyEmailMessage(String email, String providerName) {
+    return 'U heeft dit e-mailadres $email al gebruikt. Meld u aan met $providerName om door te gaan.';
+  }
+
+  @override
+  recoverDialog(String email) {
+    return 'Volg de instructies die naar $email zijn gestuurd om uw wachtwoord te herstellen.';
+  }
+
+  @override
+  String get passwordLengthMessage => r'Het wachtwoord moet minimaal 6 tekens lang zijn.';
+
+  @override
+  String get signInGoogle => r'Inloggen met Google';
+
+  @override
+  String get signInApple => r'Inloggen met Apple';
+
+  @override
+  String get signInEmail => r'Inloggen met e-mail';
+
+  @override
+  String get signInGuest => r'Doorgaan als gast';
+}
+
 // ignore: camel_case_types
 class _Bundle_de extends TranslationBundle {
   const _Bundle_de() : super(null);
@@ -557,6 +638,8 @@ TranslationBundle translationBundleForLocale(Locale locale) {
       return const _Bundle_es();
     case 'ja':
       return const _Bundle_ja();
+    case 'nl':
+      return const _Bundle_nl();
   }
   return const _Bundle_en();
 }

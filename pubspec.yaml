@@ -1,10 +1,10 @@
 name: firebase_ui
 description: Firebase auth UI, dart package to mimic the firebaseUI(Google, Facebook, Email supported)
-version: 1.0.11
+version: 1.0.12
 homepage: https://github.com/Maliffic/firebase_ui
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -19,7 +19,7 @@ dependencies:
   http: ^1.0.0
   # flutter_facebook_login: ^3.0.0
   sn_progress_dialog: ^1.0.3
-  sign_in_with_apple: ^5.0.0
+  sign_in_with_apple: ^6.0.0
 
 dev_dependencies:
   flutter_test:

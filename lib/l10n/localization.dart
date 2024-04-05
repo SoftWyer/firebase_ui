@@ -79,12 +79,13 @@ class _FFULocalizationsDelegate extends LocalizationsDelegate<FFULocalizations> 
   const _FFULocalizationsDelegate();
 
   static const List<String> _supportedLanguages = <String>[
-    'en', // English
-    'fr', // French
     'de', // Deutsch
-    'pt', // Portuguese
+    'en', // English
     'es', // Spanish
+    'fr', // French
     'ja', // Japanese
+    'nl', // Netherlands / Dutch
+    'pt', // Portuguese
   ];
 
   @override

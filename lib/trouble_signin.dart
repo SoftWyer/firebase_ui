@@ -80,7 +80,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       await auth.sendPasswordResetEmail(email: _controllerEmail!.text);
-      if (mounted) {
+      if (context.mounted) {
         Navigator.of(context).pop();
       }
     } catch (exception) {
@@ -89,7 +89,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
       }
     }
 
-    if (mounted) {
+    if (context.mounted) {
       showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
     }
   }
