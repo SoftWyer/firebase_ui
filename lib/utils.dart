@@ -63,7 +63,7 @@ class ButtonDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(color),
+          backgroundColor: WidgetStateProperty.all<Color>(color),
         ),
         onPressed: onSelected,
         child: Row(

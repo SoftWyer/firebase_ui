@@ -63,7 +63,7 @@ class _LoginViewState extends State<LoginView> {
       _user = authResult.user;
       print(_user);
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorDialog(context, e.toString());
       }
     } finally {
@@ -202,7 +202,7 @@ class _LoginViewState extends State<LoginView> {
       print('Exception');
       print(e);
       // if (e.code != AuthorizationErrorCode.canceled) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorDialog(context, e.toString());
       }
       // }

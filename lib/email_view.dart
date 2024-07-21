@@ -70,15 +70,16 @@ class _EmailViewState extends State<EmailView> {
   _connexion(BuildContext context) async {
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
+      // ignore: deprecated_member_use
       List<String> providers = await auth.fetchSignInMethodsForEmail(_controllerEmail.text);
       print(providers);
 
-      if (providers.isEmpty && mounted) {
+      if (providers.isEmpty && context.mounted) {
         bool? connected = await Navigator.of(context).push(MaterialPageRoute<bool>(builder: (BuildContext context) {
           return SignUpView(_controllerEmail.text, widget.passwordCheck);
         }));
 
-        if (connected == true && mounted) {
+        if (connected == true && context.mounted) {
           Navigator.pop(context);
         }
       } else if (providers.contains('password') && context.mounted) {
@@ -86,12 +87,12 @@ class _EmailViewState extends State<EmailView> {
           return PasswordView(_controllerEmail.text);
         }));
 
-        if (connected == true && mounted) {
+        if (connected == true && context.mounted) {
           Navigator.pop(context);
         }
       } else {
         String provider = await _showDialogSelectOtherProvider(_controllerEmail.text, providers);
-        if (provider.isNotEmpty && mounted) {
+        if (provider.isNotEmpty && context.mounted) {
           Navigator.pop(context, provider);
         }
       }
