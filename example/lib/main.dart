@@ -2,18 +2,20 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
 import 'package:firebase_ui/l10n/localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -22,30 +24,30 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         FFULocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('fr', 'FR'),
-        const Locale('en', 'US'),
-        const Locale('de', 'DE'),
-        const Locale('pt', 'BR'),
-        const Locale('es', 'MX'),
+      supportedLocales: const [
+        Locale('fr', 'FR'),
+        Locale('en', 'US'),
+        Locale('de', 'DE'),
+        Locale('pt', 'BR'),
+        Locale('es', 'MX'),
       ],
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
+  const MyHomePage({super.key, this.title});
 
   final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -80,9 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         },
         title: 'Demo',
-        header: Center(
+        header: const Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            padding: EdgeInsets.symmetric(vertical: 32.0),
             child: Text('Demo'),
           ),
         ),
@@ -90,8 +92,8 @@ class _MyHomePageState extends State<MyHomePage> {
         horizontalPadding: 8,
         bottomPadding: 5,
         avoidBottomInset: true,
-        color: Color(0x33363636),
-        providers: [
+        color: const Color(0x33363636),
+        providers: const [
           ProvidersTypes.google,
           ProvidersTypes.apple,
           ProvidersTypes.email,
@@ -118,35 +120,35 @@ class _MyHomePageState extends State<MyHomePage> {
 class HomeScreen extends StatelessWidget {
   final User? user;
 
-  HomeScreen({this.user});
+  const HomeScreen({super.key, this.user});
 
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
-        title: Text('Bienvenue'),
+        title: const Text('Bienvenue'),
         elevation: 4.0,
       ),
       body: Container(
           padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(color: Colors.amber),
+          decoration: const BoxDecoration(color: Colors.amber),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('Welcome,'),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               Text(user!.displayName ?? user!.email!),
-              SizedBox(
+              const SizedBox(
                 height: 32.0,
               ),
-              ElevatedButton(child: Text('DECONNEXION'), onPressed: _logout)
+              ElevatedButton(onPressed: _logout, child: const Text('DECONNEXION'))
             ],
           )));
 
