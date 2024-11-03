@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'dart:ui' show Locale;
 
 class TranslationBundle {
@@ -54,7 +56,6 @@ class TranslationBundle {
   recoverDialog(String email) => parent?.recoverDialog(email);
 }
 
-// ignore: camel_case_types
 class _Bundle_fr extends TranslationBundle {
   const _Bundle_fr() : super(null);
 
@@ -135,7 +136,6 @@ Connectez-vous avec $providerName pour continuer.''';
   String get signInGuest => r"Continuer en tant qu'invité";
 }
 
-// ignore: camel_case_types
 class _Bundle_en extends TranslationBundle {
   const _Bundle_en() : super(null);
 
@@ -298,7 +298,6 @@ class _Bundle_nl extends TranslationBundle {
   String get signInGuest => r'Doorgaan als gast';
 }
 
-// ignore: camel_case_types
 class _Bundle_de extends TranslationBundle {
   const _Bundle_de() : super(null);
 
@@ -380,7 +379,6 @@ Mit $providerName anmelden um fortzufarhen.''';
   String get signInGuest => r'Als Gast fortfahren';
 }
 
-// ignore: camel_case_types
 class _Bundle_pt extends TranslationBundle {
   const _Bundle_pt() : super(null);
 
@@ -463,7 +461,6 @@ Faça login com o $providerName para continuar.''';
   String get signInGuest => r'Continuar como convidado';
 }
 
-// ignore: camel_case_types
 class _Bundle_es extends TranslationBundle {
   const _Bundle_es() : super(null);
 
@@ -544,7 +541,6 @@ Entra con $providerName para continuar.''';
   String get signInGuest => r'Continua como invitado';
 }
 
-// ignore: camel_case_types
 class _Bundle_ja extends TranslationBundle {
   const _Bundle_ja() : super(null);
 
