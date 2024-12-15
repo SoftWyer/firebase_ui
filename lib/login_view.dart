@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:sn_progress_dialog/enums/progress_types.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
 import 'email_view.dart';
@@ -143,7 +144,7 @@ class _LoginViewState extends State<LoginView> {
       pr.show(
         max: 0,
         msg: 'Validating tokens...',
-        progressType: ProgressType.valuable,
+        progressType: ProgressType.determinate,
       );
 
       // This is the endpoint that will convert an authorization code obtained
