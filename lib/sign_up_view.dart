@@ -55,10 +55,7 @@ class _SignUpViewState extends State<SignUpView> {
   Widget build(BuildContext context) {
     _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(FFULocalizations.of(context).signUpTitle!),
-        elevation: 4.0,
-      ),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signUpTitle!), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
@@ -68,9 +65,7 @@ class _SignUpViewState extends State<SignUpView> {
               child: ListView(
                 children: <Widget>[
                   const SizedBox(height: 8.0),
-                  const Text(
-                    'After saving, check your email for a password reset link and then log in again',
-                  ),
+                  const Text('After saving, check your email for a password reset link and then log in again'),
                   TextField(
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
@@ -112,32 +107,29 @@ class _SignUpViewState extends State<SignUpView> {
         },
       ),
       persistentFooterButtons: <Widget>[
-        ButtonBar(
+        OverflowBar(
           alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextButton(
-                onPressed: _valid ? () => _connexion(context) : null,
-                child: Row(
-                  children: <Widget>[
-                    Text(FFULocalizations.of(context).saveLabel!),
-                  ],
-                )),
+              onPressed: _valid ? () => _connexion(context) : null,
+              child: Row(children: <Widget>[Text(FFULocalizations.of(context).saveLabel!)]),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  _submitDisplayName(String submitted) {
+  void _submitDisplayName(String submitted) {
     FocusScope.of(context).requestFocus(_focusPassword);
   }
 
-  _submit(String submitted) {
+  void _submit(String submitted) {
     _connexion(context);
   }
 
-  _connexion(BuildContext context) async {
+  Future<void> _connexion(BuildContext context) async {
     // if (widget.passwordCheck && _controllerPassword.text != _controllerCheckPassword.text) {
     //   showErrorDialog(context, FFULocalizations.of(context).passwordCheckError);
     //   return;
@@ -147,17 +139,12 @@ class _SignUpViewState extends State<SignUpView> {
 
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: _randomString(16),
-      );
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email, password: _randomString(16));
       User user = authResult.user!;
       try {
         await user.updateDisplayName(_controllerDisplayName!.text);
 
-        auth.sendPasswordResetEmail(
-          email: email,
-        );
+        auth.sendPasswordResetEmail(email: email);
 
         auth.signOut();
 

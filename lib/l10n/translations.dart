@@ -51,9 +51,9 @@ class TranslationBundle {
 
   String? get errorOccurred => parent?.errorOccurred;
 
-  allReadyEmailMessage(String email, String providerName) => parent?.allReadyEmailMessage(email, providerName);
+  String? allReadyEmailMessage(String email, String providerName) => parent?.allReadyEmailMessage(email, providerName);
 
-  recoverDialog(String email) => parent?.recoverDialog(email);
+  String? recoverDialog(String email) => parent?.recoverDialog(email);
 }
 
 class _Bundle_fr extends TranslationBundle {

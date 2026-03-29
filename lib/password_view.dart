@@ -29,10 +29,7 @@ class _PasswordViewState extends State<PasswordView> {
   Widget build(BuildContext context) {
     _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(FFULocalizations.of(context).signInTitle!),
-        elevation: 4.0,
-      ),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signInTitle!), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
@@ -58,13 +55,15 @@ class _PasswordViewState extends State<PasswordView> {
                   ),
                   const SizedBox(height: 16.0),
                   Container(
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                          onTap: _handleLostPassword,
-                          child: Text(
-                            FFULocalizations.of(context).troubleSigningInLabel!,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ))),
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: _handleLostPassword,
+                      child: Text(
+                        FFULocalizations.of(context).troubleSigningInLabel!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -72,40 +71,43 @@ class _PasswordViewState extends State<PasswordView> {
         },
       ),
       persistentFooterButtons: <Widget>[
-        ButtonBar(
+        OverflowBar(
           alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextButton(
-                onPressed: () => _connexion(context),
-                child: Row(
-                  children: <Widget>[
-                    Text(FFULocalizations.of(context).signInLabel!),
-                  ],
-                )),
+              onPressed: () => _connexion(context),
+              child: Row(children: <Widget>[Text(FFULocalizations.of(context).signInLabel!)]),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  _submit(String submitted) {
+  void _submit(String submitted) {
     _connexion(context);
   }
 
-  _handleLostPassword() {
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: (BuildContext context) {
-      return TroubleSignIn(_controllerEmail!.text);
-    }));
+  void _handleLostPassword() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return TroubleSignIn(_controllerEmail!.text);
+        },
+      ),
+    );
   }
 
-  _connexion(BuildContext context) async {
+  Future<void> _connexion(BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     UserCredential authResult;
     User? user;
     try {
-      authResult =
-          await auth.signInWithEmailAndPassword(email: _controllerEmail!.text, password: _controllerPassword!.text);
+      authResult = await auth.signInWithEmailAndPassword(
+        email: _controllerEmail!.text,
+        password: _controllerPassword!.text,
+      );
       user = authResult.user;
       print(user);
     } catch (exception) {

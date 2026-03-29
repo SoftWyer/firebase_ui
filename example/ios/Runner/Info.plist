@@ -62,9 +62,5 @@
 			</array>
 		</dict>
 	</array>
-	<key>FacebookAppID</key>
-	<string>2121619214739833</string>
-	<key>FacebookDisplayName</key>
-	<string>Flutter Plugins</string>
 </dict>
 </plist>
