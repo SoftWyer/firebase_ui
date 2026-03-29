@@ -7,14 +7,14 @@ import 'utils.dart';
 class TroubleSignIn extends StatefulWidget {
   final String email;
 
-  TroubleSignIn(this.email, {Key key}) : super(key: key);
+  const TroubleSignIn(this.email, {super.key});
 
   @override
-  _TroubleSignInState createState() => _TroubleSignInState();
+  State<StatefulWidget> createState() => _TroubleSignInState();
 }
 
 class _TroubleSignInState extends State<TroubleSignIn> {
-  TextEditingController _controllerEmail;
+  TextEditingController? _controllerEmail;
 
   @override
   initState() {
@@ -24,64 +24,68 @@ class _TroubleSignInState extends State<TroubleSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail.text = widget.email;
+    _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(FFULocalizations.of(context).recoverPasswordTitle),
-        elevation: 4.0,
-      ),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).recoverPasswordTitle!), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                SizedBox(height: 16.0),
-                Container(
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      FFULocalizations.of(context).recoverHelpLabel,
-                      style: Theme.of(context).textTheme.caption,
-                    )),
-                //const SizedBox(height: 5.0),
-              ],
+                      FFULocalizations.of(context).recoverHelpLabel!,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  //const SizedBox(height: 5.0),
+                ],
+              ),
             ),
           );
         },
       ),
       persistentFooterButtons: <Widget>[
-        ButtonBar(
+        OverflowBar(
           alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextButton(
-                onPressed: () => _send(context),
-                child: Row(
-                  children: <Widget>[
-                    Text(FFULocalizations.of(context).sendButtonLabel),
-                  ],
-                )),
+              onPressed: () => _send(context),
+              child: Row(children: <Widget>[Text(FFULocalizations.of(context).sendButtonLabel!)]),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  _send(BuildContext context) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> _send(BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      await _auth.sendPasswordResetEmail(email: _controllerEmail.text);
-      Navigator.of(context).pop();
+      await auth.sendPasswordResetEmail(email: _controllerEmail!.text);
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     } catch (exception) {
-      showErrorDialog(context, exception);
+      if (context.mounted) {
+        showErrorDialog(context, exception.toString());
+      }
     }
 
-    showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail.text));
+    if (context.mounted) {
+      showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
+    }
   }
 }

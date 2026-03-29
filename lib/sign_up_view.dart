@@ -18,17 +18,17 @@ String _randomString(int length) {
 
 class SignUpView extends StatefulWidget {
   final String email;
-  final bool passwordCheck;
+  final bool? passwordCheck;
 
-  SignUpView(this.email, this.passwordCheck, {Key key}) : super(key: key);
+  const SignUpView(this.email, this.passwordCheck, {super.key});
 
   @override
-  _SignUpViewState createState() => _SignUpViewState();
+  State<StatefulWidget> createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  TextEditingController _controllerEmail;
-  TextEditingController _controllerDisplayName;
+  TextEditingController? _controllerEmail;
+  TextEditingController? _controllerDisplayName;
   // TextEditingController _controllerPassword;
   // TextEditingController _controllerCheckPassword;
 
@@ -53,128 +53,122 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail.text = widget.email;
+    _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(FFULocalizations.of(context).signUpTitle),
-        elevation: 4.0,
-      ),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signUpTitle!), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              children: <Widget>[
-                const SizedBox(height: 8.0),
-                Text(
-                  'After saving, check your email for a password reset link and then log in again',
-                ),
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  onSubmitted: _submit,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                const SizedBox(height: 8.0),
-                TextField(
-                  controller: _controllerDisplayName,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  onChanged: _checkValid,
-                  onSubmitted: _submitDisplayName,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
-                ),
-                const SizedBox(height: 8.0),
-                // TextField(
-                //   controller: _controllerPassword,
-                //   obscureText: true,
-                //   autocorrect: false,
-                //   onSubmitted: _submit,
-                //   focusNode: _focusPassword,
-                //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
-                // ),
-                // !widget.passwordCheck
-                //     ? Container()
-                //     : TextField(
-                //         controller: _controllerCheckPassword,
-                //         obscureText: true,
-                //         autocorrect: false,
-                //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
-                //       ),
-              ],
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: <Widget>[
+                  const SizedBox(height: 8.0),
+                  const Text('After saving, check your email for a password reset link and then log in again'),
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    onSubmitted: _submit,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    controller: _controllerDisplayName,
+                    autofocus: true,
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    onChanged: _checkValid,
+                    onSubmitted: _submitDisplayName,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
+                  ),
+                  const SizedBox(height: 8.0),
+                  // TextField(
+                  //   controller: _controllerPassword,
+                  //   obscureText: true,
+                  //   autocorrect: false,
+                  //   onSubmitted: _submit,
+                  //   focusNode: _focusPassword,
+                  //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
+                  // ),
+                  // !widget.passwordCheck
+                  //     ? Container()
+                  //     : TextField(
+                  //         controller: _controllerCheckPassword,
+                  //         obscureText: true,
+                  //         autocorrect: false,
+                  //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
+                  //       ),
+                ],
+              ),
             ),
           );
         },
       ),
       persistentFooterButtons: <Widget>[
-        ButtonBar(
+        OverflowBar(
           alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextButton(
-                onPressed: _valid ? () => _connexion(context) : null,
-                child: Row(
-                  children: <Widget>[
-                    Text(FFULocalizations.of(context).saveLabel),
-                  ],
-                )),
+              onPressed: _valid ? () => _connexion(context) : null,
+              child: Row(children: <Widget>[Text(FFULocalizations.of(context).saveLabel!)]),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  _submitDisplayName(String submitted) {
+  void _submitDisplayName(String submitted) {
     FocusScope.of(context).requestFocus(_focusPassword);
   }
 
-  _submit(String submitted) {
+  void _submit(String submitted) {
     _connexion(context);
   }
 
-  _connexion(BuildContext context) async {
+  Future<void> _connexion(BuildContext context) async {
     // if (widget.passwordCheck && _controllerPassword.text != _controllerCheckPassword.text) {
     //   showErrorDialog(context, FFULocalizations.of(context).passwordCheckError);
     //   return;
     // }
 
-    String email = _controllerEmail.text;
+    String email = _controllerEmail!.text;
 
-    FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: _randomString(16),
-      );
-      User user = authResult.user;
+      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email, password: _randomString(16));
+      User user = authResult.user!;
       try {
-        await user.updateDisplayName(_controllerDisplayName.text);
+        await user.updateDisplayName(_controllerDisplayName!.text);
 
-        _auth.sendPasswordResetEmail(
-          email: email,
-        );
+        auth.sendPasswordResetEmail(email: email);
 
-        _auth.signOut();
+        auth.signOut();
 
-        Navigator.pop(context, true);
+        if (context.mounted) {
+          Navigator.pop(context, true);
+        }
       } catch (e) {
-        String msg = "An error occurred: $e";
+        String msg = 'An error occurred: $e';
         print(msg);
         // showErrorDialog(context, msg);
       }
     } on PlatformException catch (e) {
       print(e);
       //TODO improve errors catching
-      String msg = e?.message;
-      showErrorDialog(context, msg);
+      if (context.mounted) {
+        String? msg = e.message;
+        showErrorDialog(context, msg);
+      }
     }
   }
 
   void _checkValid(String value) {
     setState(() {
-      _valid = _controllerDisplayName.text.isNotEmpty;
+      _valid = _controllerDisplayName!.text.isNotEmpty;
     });
   }
 }

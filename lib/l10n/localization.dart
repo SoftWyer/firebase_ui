@@ -6,70 +6,69 @@ import 'package:flutter/material.dart';
 import 'translations.dart';
 
 class FFULocalizations {
-  TranslationBundle _translationBundle;
+  late TranslationBundle _translationBundle;
 
   FFULocalizations(Locale locale) {
     _translationBundle = translationBundleForLocale(locale);
   }
 
-  String get welcome => _translationBundle.welcome;
+  String? get welcome => _translationBundle.welcome;
 
-  String get signUpTitle => _translationBundle.signUpTitle;
+  String? get signUpTitle => _translationBundle.signUpTitle;
 
-  String get emailLabel => _translationBundle.emailLabel;
+  String? get emailLabel => _translationBundle.emailLabel;
 
-  String get nextButtonLabel => _translationBundle.nextButtonLabel;
+  String? get nextButtonLabel => _translationBundle.nextButtonLabel;
 
-  String get cancelButtonLabel => _translationBundle.cancelButtonLabel;
+  String? get cancelButtonLabel => _translationBundle.cancelButtonLabel;
 
-  String get passwordLabel => _translationBundle.passwordLabel;
-  String get passwordCheckLabel => _translationBundle.passwordCheckLabel;
-  String get passwordCheckError => _translationBundle.passwordCheckError;
+  String? get passwordLabel => _translationBundle.passwordLabel;
+  String? get passwordCheckLabel => _translationBundle.passwordCheckLabel;
+  String? get passwordCheckError => _translationBundle.passwordCheckError;
 
-  String get troubleSigningInLabel => _translationBundle.troubleSigningInLabel;
+  String? get troubleSigningInLabel => _translationBundle.troubleSigningInLabel;
 
-  String get signInLabel => _translationBundle.signInLabel;
+  String? get signInLabel => _translationBundle.signInLabel;
 
-  String get signInTitle => _translationBundle.signInTitle;
+  String? get signInTitle => _translationBundle.signInTitle;
 
-  String get passwordInvalidMessage => _translationBundle.passwordInvalidMessage;
+  String? get passwordInvalidMessage => _translationBundle.passwordInvalidMessage;
 
-  String get checkEmailLink => _translationBundle.checkEmailLink;
+  String? get checkEmailLink => _translationBundle.checkEmailLink;
 
-  String get recoverPasswordTitle => _translationBundle.recoverPasswordTitle;
+  String? get recoverPasswordTitle => _translationBundle.recoverPasswordTitle;
 
-  String get recoverHelpLabel => _translationBundle.recoverHelpLabel;
+  String? get recoverHelpLabel => _translationBundle.recoverHelpLabel;
 
-  String get sendButtonLabel => _translationBundle.sendButtonLabel;
+  String? get sendButtonLabel => _translationBundle.sendButtonLabel;
 
-  String get nameLabel => _translationBundle.nameLabel;
+  String? get nameLabel => _translationBundle.nameLabel;
 
-  String get saveLabel => _translationBundle.saveLabel;
+  String? get saveLabel => _translationBundle.saveLabel;
 
-  String get passwordLengthMessage => _translationBundle.passwordLengthMessage;
+  String? get passwordLengthMessage => _translationBundle.passwordLengthMessage;
 
-  String get signInFacebook => _translationBundle.signInFacebook;
-  String get signInGoogle => _translationBundle.signInGoogle;
-  String get signInApple => _translationBundle.signInApple;
-  String get signInEmail => _translationBundle.signInEmail;
-  String get signInGuest => _translationBundle.signInGuest;
+  String? get signInGoogle => _translationBundle.signInGoogle;
+  String? get signInApple => _translationBundle.signInApple;
+  String? get signInEmail => _translationBundle.signInEmail;
+  String? get signInGuest => _translationBundle.signInGuest;
 
-  String get errorOccurred => _translationBundle.errorOccurred;
+  String? get errorOccurred => _translationBundle.errorOccurred;
 
   static Future<FFULocalizations> load(Locale locale) {
-    return new SynchronousFuture<FFULocalizations>(new FFULocalizations(locale));
+    return SynchronousFuture<FFULocalizations>(FFULocalizations(locale));
   }
 
   static FFULocalizations of(BuildContext context) {
-    return Localizations.of<FFULocalizations>(context, FFULocalizations) ?? new _DefaultFFULocalizations();
+    return Localizations.of<FFULocalizations>(context, FFULocalizations) ?? _DefaultFFULocalizations();
   }
 
-  static const LocalizationsDelegate<FFULocalizations> delegate = const _FFULocalizationsDelegate();
+  static const LocalizationsDelegate<FFULocalizations> delegate = _FFULocalizationsDelegate();
 
-  String allReadyEmailMessage(String email, String providerName) =>
+  String? allReadyEmailMessage(String email, String providerName) =>
       _translationBundle.allReadyEmailMessage(email, providerName);
 
-  String recoverDialog(String email) => _translationBundle.recoverDialog(email);
+  String? recoverDialog(String email) => _translationBundle.recoverDialog(email);
 }
 
 class _DefaultFFULocalizations extends FFULocalizations {
@@ -79,12 +78,14 @@ class _DefaultFFULocalizations extends FFULocalizations {
 class _FFULocalizationsDelegate extends LocalizationsDelegate<FFULocalizations> {
   const _FFULocalizationsDelegate();
 
-  static const List<String> _supportedLanguages = const <String>[
-    'en', // English
-    'fr', // French
+  static const List<String> _supportedLanguages = <String>[
     'de', // Deutsch
-    'pt', // Portuguese
+    'en', // English
     'es', // Spanish
+    'fr', // French
+    'ja', // Japanese
+    'nl', // Netherlands / Dutch
+    'pt', // Portuguese
   ];
 
   @override

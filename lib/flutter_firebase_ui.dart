@@ -1,8 +1,6 @@
-library firebase_ui;
-
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_ui/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +12,8 @@ export 'config.dart';
 export 'utils.dart';
 
 class SignInScreen extends StatefulWidget {
-  SignInScreen(
-      {Key key,
+  const SignInScreen(
+      {super.key,
       this.title,
       this.header,
       this.footer,
@@ -24,18 +22,17 @@ class SignInScreen extends StatefulWidget {
       this.color = Colors.white,
       this.allowBackAction = true,
       this.config,
-      @required this.showBar,
-      @required this.avoidBottomInset,
-      @required this.bottomPadding,
-      @required this.horizontalPadding})
-      : super(key: key);
+      required this.showBar,
+      required this.avoidBottomInset,
+      required this.bottomPadding,
+      required this.horizontalPadding});
 
-  final String title;
-  final Widget header;
-  final Widget footer;
-  final List<ProvidersTypes> providers;
+  final String? title;
+  final Widget? header;
+  final Widget? footer;
+  final List<ProvidersTypes>? providers;
   final Color color;
-  final bool signUpPasswordCheck;
+  final bool? signUpPasswordCheck;
   final bool showBar;
   final bool avoidBottomInset;
   final double horizontalPadding;
@@ -43,32 +40,34 @@ class SignInScreen extends StatefulWidget {
   final bool allowBackAction;
 
   /// A [Map] containing configuration items for various sign-in clients
-  final Map<String, Config> config;
+  final Map<String, Config>? config;
 
   @override
-  _SignInScreenState createState() => new _SignInScreenState();
+  State<StatefulWidget> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Widget get _header => widget.header ?? SizedBox.shrink();
-  Widget get _footer => widget.footer ?? SizedBox.shrink();
+  Widget get _header => widget.header ?? const SizedBox.shrink();
+  Widget get _footer => widget.footer ?? const SizedBox.shrink();
 
   bool get _passwordCheck => widget.signUpPasswordCheck ?? false;
 
   Future<List<ProvidersTypes>> _providers() async {
-    print("Determining providers ${widget.providers}");
+    if (kDebugMode) {
+      print('Determining providers ${widget.providers}');
+    }
 
-    List<ProvidersTypes> validProviders = List.from(widget?.providers ?? [ProvidersTypes.email]);
+    List<ProvidersTypes> validProviders = List.from(widget.providers ?? [ProvidersTypes.email]);
 
     // Apple sign in is only available with iOS 13+, so we check
     if (!kIsWeb && Platform.isIOS && validProviders.contains(ProvidersTypes.apple)) {
       // Check iOS version
       IosDeviceInfo info = await deviceInfoPlugin.iosInfo;
-      int v = int.tryParse(info.systemVersion.split(r'.')[0]);
-      print("iOS major version is $v");
+      int v = int.tryParse(info.systemVersion.split(r'.')[0])!;
+      print('iOS major version is $v');
       if (v < 13) {
-        print("Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}");
+        print('Cannot use Apple Sign In with an iOS version of less than 13. This version is ${info.systemVersion}');
         validProviders.remove(ProvidersTypes.apple);
       }
     }
@@ -77,38 +76,36 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () {
-          return Future.value(widget.allowBackAction);
-        },
+  Widget build(BuildContext context) => PopScope(
+        canPop: widget.allowBackAction,
         child: Scaffold(
             appBar: widget.showBar
                 ? AppBar(
-                    title: Text(widget.title),
+                    title: Text(widget.title!),
                     elevation: 4.0,
                     automaticallyImplyLeading: widget.allowBackAction,
                   )
                 : null,
             resizeToAvoidBottomInset: widget.avoidBottomInset,
             body: Builder(
-              builder: (BuildContext context) {
+              builder: (context) {
                 return Container(
-                    decoration: BoxDecoration(color: widget.color),
+                  decoration: BoxDecoration(color: widget.color),
+                  child: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
+                      children: [
                         _header,
                         Expanded(
                           child: Container(
-                            constraints: BoxConstraints(maxWidth: 300),
+                            constraints: const BoxConstraints(maxWidth: 300),
                             padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
                             child: FutureBuilder<List<ProvidersTypes>>(
                                 future: _providers(),
-                                initialData: [],
-                                builder: (context, AsyncSnapshot<List<ProvidersTypes>> snapshot) {
-                                  print("SignIn Snapshot is $snapshot");
-
+                                initialData: const [],
+                                builder: (context, snapshot) {
+                                  print('SignIn Snapshot is $snapshot');
                                   return LoginView(
                                     providers: snapshot.data,
                                     passwordCheck: _passwordCheck,
@@ -120,7 +117,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         _footer,
                       ],
-                    ));
+                    ),
+                  ),
+                );
               },
             )),
       );

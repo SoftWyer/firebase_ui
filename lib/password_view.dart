@@ -8,15 +8,15 @@ import 'utils.dart';
 class PasswordView extends StatefulWidget {
   final String email;
 
-  PasswordView(this.email, {Key key}) : super(key: key);
+  const PasswordView(this.email, {super.key});
 
   @override
-  _PasswordViewState createState() => _PasswordViewState();
+  State<StatefulWidget> createState() => _PasswordViewState();
 }
 
 class _PasswordViewState extends State<PasswordView> {
-  TextEditingController _controllerEmail;
-  TextEditingController _controllerPassword;
+  TextEditingController? _controllerEmail;
+  TextEditingController? _controllerPassword;
 
   @override
   initState() {
@@ -27,94 +27,101 @@ class _PasswordViewState extends State<PasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail.text = widget.email;
+    _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(FFULocalizations.of(context).signInTitle),
-        elevation: 4.0,
-      ),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signInTitle!), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _controllerEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
-                ),
-                //const SizedBox(height: 5.0),
-                TextField(
-                  controller: _controllerPassword,
-                  autofocus: true,
-                  onSubmitted: _submit,
-                  obscureText: true,
-                  autocorrect: false,
-                  decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
-                ),
-                SizedBox(height: 16.0),
-                Container(
+          return Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _controllerEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
+                  ),
+                  //const SizedBox(height: 5.0),
+                  TextField(
+                    controller: _controllerPassword,
+                    autofocus: true,
+                    onSubmitted: _submit,
+                    obscureText: true,
+                    autocorrect: false,
+                    decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Container(
                     alignment: Alignment.centerLeft,
                     child: InkWell(
-                        child: Text(
-                          FFULocalizations.of(context).troubleSigningInLabel,
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        onTap: _handleLostPassword)),
-              ],
+                      onTap: _handleLostPassword,
+                      child: Text(
+                        FFULocalizations.of(context).troubleSigningInLabel!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
       ),
       persistentFooterButtons: <Widget>[
-        ButtonBar(
+        OverflowBar(
           alignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextButton(
-                onPressed: () => _connexion(context),
-                child: Row(
-                  children: <Widget>[
-                    Text(FFULocalizations.of(context).signInLabel),
-                  ],
-                )),
+              onPressed: () => _connexion(context),
+              child: Row(children: <Widget>[Text(FFULocalizations.of(context).signInLabel!)]),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 
-  _submit(String submitted) {
+  void _submit(String submitted) {
     _connexion(context);
   }
 
-  _handleLostPassword() {
-    Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return TroubleSignIn(_controllerEmail.text);
-    }));
+  void _handleLostPassword() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return TroubleSignIn(_controllerEmail!.text);
+        },
+      ),
+    );
   }
 
-  _connexion(BuildContext context) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> _connexion(BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
     UserCredential authResult;
-    User user;
+    User? user;
     try {
-      authResult =
-          await _auth.signInWithEmailAndPassword(email: _controllerEmail.text, password: _controllerPassword.text);
+      authResult = await auth.signInWithEmailAndPassword(
+        email: _controllerEmail!.text,
+        password: _controllerPassword!.text,
+      );
       user = authResult.user;
       print(user);
     } catch (exception) {
       //TODO improve errors catching
-      String msg = FFULocalizations.of(context).passwordInvalidMessage;
-      showErrorDialog(context, msg);
+      if (context.mounted) {
+        String? msg = FFULocalizations.of(context).passwordInvalidMessage;
+        showErrorDialog(context, msg);
+      }
     }
 
     if (user != null) {
-      if (user.emailVerified) {
+      if (user.emailVerified && context.mounted) {
         Navigator.pop(context, true);
-      } else {
+      } else if (context.mounted) {
         showErrorDialog(context, FFULocalizations.of(context).checkEmailLink);
       }
     }

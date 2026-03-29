@@ -3,49 +3,58 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
-import 'package:firebase_ui/config.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:sn_progress_dialog/enums/progress_types.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 import 'email_view.dart';
-import 'utils.dart';
 
 class LoginView extends StatefulWidget {
-  final List<ProvidersTypes> providers;
-  final bool passwordCheck;
+  final List<ProvidersTypes>? providers;
+  final bool? passwordCheck;
   final double bottomPadding;
   final Map<String, Config> config;
 
-  LoginView(
-      {Key key, @required this.providers, this.passwordCheck, @required this.bottomPadding, Map<String, Config> config})
-      : this.config = config ?? {},
-        super(key: key) {
-    print("Widget providers are ${this.providers}");
+  LoginView({
+    super.key,
+    required this.providers,
+    this.passwordCheck,
+    required this.bottomPadding,
+    Map<String, Config>? config,
+  }) : config = config ?? {} {
+    print('Widget providers are $providers');
   }
 
   @override
-  _LoginViewState createState() => new _LoginViewState();
+  State<StatefulWidget> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Map<ProvidersTypes, ButtonDescription> _buttons;
+  late Map<ProvidersTypes, ButtonDescription> _buttons;
 
   bool _isSigningIn = false;
-  User _user;
+  User? _user;
 
-  _handleEmailSignIn() async {
+  // Google Sign-In 7.x requires using the singleton instance
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+
+  Future<void> _handleEmailSignIn() async {
     _signingIn(true);
     try {
-      String value = await Navigator.of(context).push(new MaterialPageRoute<String>(builder: (BuildContext context) {
-        return new EmailView(widget.passwordCheck);
-      }));
+      String? value = await Navigator.of(context).push(
+        MaterialPageRoute<String>(
+          builder: (BuildContext context) {
+            return EmailView(widget.passwordCheck);
+          },
+        ),
+      );
 
       if (value != null) {
         _followProvider(value);
@@ -55,36 +64,66 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
-  _handleGuestSignIn() async {
+  Future<void> _handleGuestSignIn() async {
     _signingIn(true);
     try {
       UserCredential authResult = await _auth.signInAnonymously();
       _user = authResult.user;
       print(_user);
     } catch (e) {
-      showErrorDialog(context, e.details ?? e.message);
+      if (mounted) {
+        showErrorDialog(context, e.toString());
+      }
     } finally {
       _signingIn(false);
     }
   }
 
-  _handleGoogleSignIn() async {
+  Future<void> _handleGoogleSignIn() async {
     _signingIn(true);
     try {
-      GoogleSignInAccount googleUser = await googleSignIn.signIn();
-      if (googleUser != null) {
-        GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        if (googleAuth.accessToken != null) {
-          try {
-            AuthCredential credential =
-                GoogleAuthProvider.credential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
-            UserCredential authResult = await _auth.signInWithCredential(credential);
-            _user = authResult.user;
-            print(_user);
-          } catch (e) {
-            showErrorDialog(context, e.details);
+      // Initialize Google Sign-In (required for 7.x)
+      await _googleSignIn.initialize();
+
+      // Attempt lightweight authentication first (non-blocking on web)
+      final account =
+          await _googleSignIn.attemptLightweightAuthentication() ??
+          await _googleSignIn.authenticate(scopeHint: ['https://www.googleapis.com/auth/userinfo.email']);
+
+      // Get the idToken from authentication
+      final idToken = account.authentication.idToken;
+
+      // Get client authorization for access token
+      final clientAuth = await account.authorizationClient.authorizeScopes([
+        'https://www.googleapis.com/auth/userinfo.email',
+      ]);
+
+      if (idToken != null && clientAuth.accessToken.isNotEmpty) {
+        try {
+          AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: idToken,
+            accessToken: clientAuth.accessToken,
+          );
+          UserCredential authResult = await _auth.signInWithCredential(credential);
+          _user = authResult.user;
+          print(_user);
+        } catch (e) {
+          if (mounted) {
+            showErrorDialog(context, e.toString());
           }
         }
+      }
+    } on GoogleSignInException catch (e) {
+      // Handle cancellation and other errors specific to google_sign_in 7.x
+      if (e.code != GoogleSignInExceptionCode.canceled) {
+        if (mounted) {
+          showErrorDialog(context, e.toString());
+        }
+      }
+    } catch (e) {
+      // Handle any other unexpected errors
+      if (mounted) {
+        showErrorDialog(context, e.toString());
       }
     } finally {
       _signingIn(false);
@@ -105,28 +144,27 @@ class _LoginViewState extends State<LoginView> {
   ///
   /// ```
 
-  _handleAppleSignIn() async {
-    assert(widget.config[AppleConfig.configName] != null,
-        "You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}");
+  Future<void> _handleAppleSignIn() async {
+    assert(
+      widget.config[AppleConfig.configName] != null,
+      'You must supply an AppleConfig object in the config map, eg. {AppleConfig.configName: AppleConfig(...)}',
+    );
     _signingIn(true);
 
-    var pr = new ProgressDialog(context);
-    pr.style(message: 'Validating tokens...');
+    var pr = ProgressDialog(context: context);
 
     try {
-      AppleConfig appleConfig = widget.config[AppleConfig.configName];
+      AppleConfig appleConfig = widget.config[AppleConfig.configName] as AppleConfig;
 
       // Generate a none and SH256 hash (SoftWyer)
       String nonce = Nonce.createCryptoRandomString();
       Digest hashedNonce = sha256.convert(nonce.codeUnits);
 
       final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
+        scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName],
         webAuthenticationOptions: WebAuthenticationOptions(
-          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+          // TODO: Set the `clientId` and `redirectUri` arguments to the values
+          // you entered in the Apple Developer portal during the setup
           clientId: appleConfig.clientId,
           redirectUri: Uri(scheme: appleConfig.scheme, host: appleConfig.host, path: appleConfig.redirectPath),
         ),
@@ -134,9 +172,9 @@ class _LoginViewState extends State<LoginView> {
         // state: 'example-state',
       );
 
-      await pr.show();
-
       print(credential);
+
+      pr.show(max: 0, msg: 'Validating tokens...', progressType: ProgressType.determinate);
 
       // This is the endpoint that will convert an authorization code obtained
       // via Sign in with Apple into a session in your system
@@ -147,7 +185,7 @@ class _LoginViewState extends State<LoginView> {
         scheme: appleConfig.scheme,
         host: appleConfig.host,
         path: appleConfig.path,
-        queryParameters: <String, String>{
+        queryParameters: <String, String?>{
           'code': credential.authorizationCode,
           'firstName': credential.givenName,
           'lastName': credential.familyName,
@@ -156,9 +194,7 @@ class _LoginViewState extends State<LoginView> {
         },
       );
 
-      final session = await http.Client().post(
-        signInWithAppleEndpoint,
-      );
+      final session = await http.Client().post(signInWithAppleEndpoint);
 
       // If we got this far, a session based on the Apple ID credential has been created in your system,
       // and you can now set this as the app's session
@@ -191,31 +227,19 @@ class _LoginViewState extends State<LoginView> {
       _user = authResult.user;
       print(_user);
     } catch (e) {
-      print("Exception");
+      print('Exception');
       print(e);
-      if (e?.code != AuthorizationErrorCode.canceled) {
-        showErrorDialog(context, e?.message ?? "Unknown");
+      // if (e.code != AuthorizationErrorCode.canceled) {
+      if (mounted) {
+        showErrorDialog(context, e.toString());
       }
+      // }
     } finally {
-      await pr.hide();
+      pr.close();
 
       _signingIn(false);
     }
   }
-
-  // _handleFacebookSignin() async {
-  //   FacebookLoginResult result = await facebookLogin.logIn(['email']);
-  //   if (result.accessToken != null) {
-  //     try {
-  //       AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
-  //       UserCredential authResult = await _auth.signInWithCredential(credential);
-  //       User user = authResult.user;
-  //       print(user);
-  //     } catch (e) {
-  //       showErrorDialog(context, e.details);
-  //     }
-  //   }
-  // }
 
   void _signingIn(bool isSigningIn) {
     if (_user != null || isSigningIn != _isSigningIn) {
@@ -229,32 +253,40 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     _buttons = {
-      ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google].copyWith(
-          onSelected: _isSigningIn ? null : _handleGoogleSignIn, labelColor: _isSigningIn ? Colors.white : null),
-      ProvidersTypes.apple: providersDefinitions(context)[ProvidersTypes.apple]
-          .copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
-      ProvidersTypes.email: providersDefinitions(context)[ProvidersTypes.email]
-          .copyWith(onSelected: _isSigningIn ? null : _handleEmailSignIn),
-      ProvidersTypes.guest: providersDefinitions(context)[ProvidersTypes.guest]
-          .copyWith(onSelected: _isSigningIn ? null : _handleGuestSignIn),
+      ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google]!.copyWith(
+        onSelected: _isSigningIn ? null : _handleGoogleSignIn,
+        labelColor: Colors.black,
+      ),
+      if (!kIsWeb)
+        ProvidersTypes.apple: providersDefinitions(
+          context,
+        )[ProvidersTypes.apple]!.copyWith(onSelected: _isSigningIn ? null : _handleAppleSignIn),
+      ProvidersTypes.email: providersDefinitions(
+        context,
+      )[ProvidersTypes.email]!.copyWith(onSelected: _isSigningIn ? null : _handleEmailSignIn),
+      ProvidersTypes.guest: providersDefinitions(
+        context,
+      )[ProvidersTypes.guest]!.copyWith(onSelected: _isSigningIn ? null : _handleGuestSignIn),
     };
 
-    print("Widget providers are ${widget.providers}");
+    print('Widget providers are ${widget.providers}');
 
-    return ListView(
-      shrinkWrap: false,
-      primary: true,
-      children: widget.providers.map((p) {
-        return Container(padding: EdgeInsets.only(bottom: widget.bottomPadding), child: _buttons[p] ?? new Container());
-      }).toList(),
+    return Center(
+      child: ListView(
+        shrinkWrap: false,
+        primary: true,
+        children: widget.providers!.map((p) {
+          return Container(
+            padding: EdgeInsets.only(bottom: widget.bottomPadding, top: p == ProvidersTypes.guest ? 20 : 0),
+            child: _buttons[p] ?? Container(),
+          );
+        }).toList(),
+      ),
     );
   }
 
   void _followProvider(String value) {
-    ProvidersTypes provider = stringToProvidersType(value);
-    // if (provider == ProvidersTypes.facebook) {
-    //   _handleFacebookSignin();
-    // } else
+    ProvidersTypes? provider = stringToProvidersType(value);
     if (provider == ProvidersTypes.google) {
       _handleGoogleSignIn();
     }
