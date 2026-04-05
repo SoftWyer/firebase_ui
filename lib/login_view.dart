@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui/choose_sign_in_up.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:sn_progress_dialog/enums/progress_types.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
-
-import 'email_view.dart';
 
 class LoginView extends StatefulWidget {
   final List<ProvidersTypes>? providers;
@@ -51,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
       String? value = await Navigator.of(context).push(
         MaterialPageRoute<String>(
           builder: (BuildContext context) {
-            return EmailView(widget.passwordCheck);
+            return ChooseSignInUpView();
           },
         ),
       );

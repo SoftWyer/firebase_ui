@@ -14,7 +14,7 @@ class TroubleSignIn extends StatefulWidget {
 }
 
 class _TroubleSignInState extends State<TroubleSignIn> {
-  TextEditingController? _controllerEmail;
+  late final TextEditingController _controllerEmail;
 
   @override
   initState() {
@@ -23,10 +23,16 @@ class _TroubleSignInState extends State<TroubleSignIn> {
   }
 
   @override
+  void dispose() {
+    _controllerEmail.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _controllerEmail!.text = widget.email;
+    _controllerEmail.text = widget.email;
     return Scaffold(
-      appBar: AppBar(title: Text(FFULocalizations.of(context).recoverPasswordTitle!), elevation: 4.0),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).recoverPasswordTitle), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
@@ -34,7 +40,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
               constraints: const BoxConstraints(maxWidth: 800),
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                children: <Widget>[
+                children: [
                   TextField(
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
@@ -45,7 +51,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      FFULocalizations.of(context).recoverHelpLabel!,
+                      FFULocalizations.of(context).recoverHelpLabel,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
@@ -56,14 +62,14 @@ class _TroubleSignInState extends State<TroubleSignIn> {
           );
         },
       ),
-      persistentFooterButtons: <Widget>[
+      persistentFooterButtons: [
         OverflowBar(
           alignment: MainAxisAlignment.center,
           // mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             TextButton(
               onPressed: () => _send(context),
-              child: Row(children: <Widget>[Text(FFULocalizations.of(context).sendButtonLabel!)]),
+              child: Row(children: [Text(FFULocalizations.of(context).sendButtonLabel)]),
             ),
           ],
         ),
@@ -74,7 +80,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
   Future<void> _send(BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      await auth.sendPasswordResetEmail(email: _controllerEmail!.text);
+      await auth.sendPasswordResetEmail(email: _controllerEmail.text);
       if (context.mounted) {
         Navigator.of(context).pop();
       }
@@ -85,7 +91,7 @@ class _TroubleSignInState extends State<TroubleSignIn> {
     }
 
     if (context.mounted) {
-      showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail!.text));
+      showErrorDialog(context, FFULocalizations.of(context).recoverDialog(_controllerEmail.text));
     }
   }
 }

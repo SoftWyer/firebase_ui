@@ -66,7 +66,7 @@ class ButtonDescription extends StatelessWidget {
       style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(color)),
       onPressed: onSelected,
       child: Row(
-        children: <Widget>[
+        children: [
           Container(
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 32.0, 16.0),
             child: icon != null
@@ -120,11 +120,11 @@ Future<void> showErrorDialog(BuildContext context, String? message, {String? tit
     builder: (BuildContext context) => AlertDialog(
       title: title != null ? Text(title) : null,
       content: SingleChildScrollView(
-        child: ListBody(children: <Widget>[Text(message ?? FFULocalizations.of(context).errorOccurred!)]),
+        child: ListBody(children: [Text(message ?? FFULocalizations.of(context).errorOccurred)]),
       ),
-      actions: <Widget>[
+      actions: [
         TextButton(
-          child: Row(children: <Widget>[Text(FFULocalizations.of(context).cancelButtonLabel!)]),
+          child: Row(children: [Text(FFULocalizations.of(context).cancelButtonLabel)]),
           onPressed: () {
             Navigator.of(context).pop();
           },

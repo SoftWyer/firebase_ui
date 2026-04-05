@@ -2,62 +2,69 @@
 
 import 'dart:ui' show Locale;
 
-class TranslationBundle {
-  const TranslationBundle(this.parent);
-  final TranslationBundle? parent;
+sealed class TranslationBundle {
+  const TranslationBundle();
 
-  String? get welcome => parent?.welcome;
+  String get welcome;
 
-  String? get signUpTitle => parent?.signUpTitle;
+  String get signUpTitle;
 
-  String? get emailLabel => parent?.emailLabel;
+  String get emailLabel;
 
-  String? get nextButtonLabel => parent?.nextButtonLabel;
+  String get nextButtonLabel;
 
-  String? get cancelButtonLabel => parent?.cancelButtonLabel;
+  String get cancelButtonLabel;
 
-  String? get passwordLabel => parent?.passwordLabel;
+  String get passwordLabel;
 
-  String? get passwordCheckLabel => parent?.passwordCheckLabel;
+  String get passwordCheckLabel;
 
-  String? get passwordCheckError => parent?.passwordCheckError;
+  String get passwordCheckError;
 
-  String? get troubleSigningInLabel => parent?.troubleSigningInLabel;
+  String get troubleSigningInLabel;
 
-  String? get signInLabel => parent?.signInLabel;
+  String get signInLabel;
 
-  String? get signInTitle => parent?.signInTitle;
+  String get signInTitle;
 
-  String? get passwordInvalidMessage => parent?.passwordInvalidMessage;
+  String get passwordInvalidMessage;
 
-  String? get checkEmailLink => parent?.checkEmailLink;
+  String get checkEmailLink;
 
-  String? get recoverPasswordTitle => parent?.recoverPasswordTitle;
+  String get recoverPasswordTitle;
 
-  String? get recoverHelpLabel => parent?.recoverHelpLabel;
+  String get recoverHelpLabel;
 
-  String? get sendButtonLabel => parent?.sendButtonLabel;
+  String get checkEmailLinkSaved;
 
-  String? get nameLabel => parent?.nameLabel;
+  String get signUpLabel;
 
-  String? get saveLabel => parent?.saveLabel;
+  String get sendButtonLabel;
 
-  String? get passwordLengthMessage => parent?.passwordLengthMessage;
+  String get nameLabel;
 
-  String? get signInGoogle => parent?.signInGoogle;
-  String? get signInApple => parent?.signInApple;
-  String? get signInEmail => parent?.signInEmail;
-  String? get signInGuest => parent?.signInGuest;
+  String get saveLabel;
 
-  String? get errorOccurred => parent?.errorOccurred;
+  String get passwordLengthMessage;
 
-  String? allReadyEmailMessage(String email, String providerName) => parent?.allReadyEmailMessage(email, providerName);
+  String get signInGoogle;
+  String get signInApple;
+  String get signInEmail;
+  String get signInGuest;
 
-  String? recoverDialog(String email) => parent?.recoverDialog(email);
+  String get errorOccurred;
+
+  String get alreadyHaveAnAccount;
+
+  String get createAnAccount;
+
+  String allReadyEmailMessage(String email, String providerName);
+
+  String recoverDialog(String email);
 }
 
 class _Bundle_fr extends TranslationBundle {
-  const _Bundle_fr() : super(null);
+  const _Bundle_fr();
 
   @override
   String get welcome => r'Bienvenue';
@@ -101,6 +108,13 @@ class _Bundle_fr extends TranslationBundle {
       r'Obtenez des instructions envoyées à cet e-mail pour expliquer comment réinitialiser votre mot de passe';
 
   @override
+  String get checkEmailLinkSaved =>
+      r'Après avoir enregistré, vérifiez votre courrier électronique pour un lien de réinitialisation du mot de passe, puis reconnectez-vous';
+
+  @override
+  String get signUpLabel => r'S inscrire';
+
+  @override
   String get sendButtonLabel => r'ENVOYER';
 
   @override
@@ -108,6 +122,12 @@ class _Bundle_fr extends TranslationBundle {
 
   @override
   String get errorOccurred => r'Une erreur est survenue';
+
+  @override
+  String get alreadyHaveAnAccount => r'Se connecter si vous avez déjà un compte';
+
+  @override
+  String get createAnAccount => 'Créer un compte si vous n\'en avez pas un';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -134,10 +154,13 @@ Connectez-vous avec $providerName pour continuer.''';
 
   @override
   String get signInGuest => r"Continuer en tant qu'invité";
+
+  @override
+  String get checkEmailLink => r'Vérifiez votre courrier électronique pour un lien de réinitialisation du mot de passe';
 }
 
 class _Bundle_en extends TranslationBundle {
-  const _Bundle_en() : super(null);
+  const _Bundle_en();
 
   @override
   String get welcome => r'Welcome';
@@ -182,6 +205,12 @@ class _Bundle_en extends TranslationBundle {
   String get recoverHelpLabel => r'Get instructions sent to this email that explain how to reset your password';
 
   @override
+  String get checkEmailLinkSaved => r'After saving, check your email for a password reset link and then log in again';
+
+  @override
+  String get signUpLabel => r'Sign up';
+
+  @override
   String get sendButtonLabel => r'SEND';
 
   @override
@@ -189,6 +218,12 @@ class _Bundle_en extends TranslationBundle {
 
   @override
   String get errorOccurred => r'An error occurred';
+
+  @override
+  String get alreadyHaveAnAccount => r'Sign in if you already have an account';
+
+  @override
+  String get createAnAccount => 'Create an account if you don\'t have one';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -218,7 +253,7 @@ Sign in with $providerName to continue.''';
 }
 
 class _Bundle_nl extends TranslationBundle {
-  const _Bundle_nl() : super(null);
+  const _Bundle_nl();
 
   @override
   String get welcome => r'Welkom';
@@ -234,7 +269,6 @@ class _Bundle_nl extends TranslationBundle {
 
   @override
   String get checkEmailLink => r'Controleer uw e-mail op een link om uw wachtwoord te resetten';
-
   @override
   String get passwordCheckError => r'De wachtwoorden zijn verschillend';
 
@@ -264,6 +298,13 @@ class _Bundle_nl extends TranslationBundle {
       r'Ontvang instructies via dit e-mailadres die uitleggen hoe u uw wachtwoord kunt resetten';
 
   @override
+  String get checkEmailLinkSaved =>
+      r'Sla op en controleer vervolgens uw e-mail op een link om uw wachtwoord te resetten en log daarna opnieuw in';
+
+  @override
+  String get signUpLabel => r'Aanmelden';
+
+  @override
   String get sendButtonLabel => r'VERZENDEN';
 
   @override
@@ -271,6 +312,12 @@ class _Bundle_nl extends TranslationBundle {
 
   @override
   String get errorOccurred => r'Er is een fout opgetreden';
+
+  @override
+  String get alreadyHaveAnAccount => r'Meld u aan als u al een account heeft';
+
+  @override
+  String get createAnAccount => 'Maak een account aan als u er geen heeft';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -299,7 +346,7 @@ class _Bundle_nl extends TranslationBundle {
 }
 
 class _Bundle_de extends TranslationBundle {
-  const _Bundle_de() : super(null);
+  const _Bundle_de();
 
   @override
   String get welcome => r'Willkommen';
@@ -314,7 +361,7 @@ class _Bundle_de extends TranslationBundle {
   String get passwordCheckLabel => r'Bestätigen Sie das Passwort';
 
   @override
-  String get checkEmailLink => r'Check email for password reset link';
+  String get checkEmailLink => r'Überprüfen Sie Ihre E-Mail auf einen Link zum Zurücksetzen des Passworts';
 
   @override
   String get passwordCheckError => r'Die zwei Passwörter sind unterschiedlich';
@@ -344,6 +391,13 @@ class _Bundle_de extends TranslationBundle {
   String get recoverHelpLabel => r'Erhalte Anweisungen zum Wiederherstellen des Passworts an diese Email';
 
   @override
+  String get checkEmailLinkSaved =>
+      r'Nach dem Speichern überprüfen Sie Ihre E-Mail auf einen Link zum Zurücksetzen des Passworts und melden Sie sich erneut an';
+
+  @override
+  String get signUpLabel => r'Registrieren';
+
+  @override
   String get sendButtonLabel => r'SENDEN';
 
   @override
@@ -351,6 +405,12 @@ class _Bundle_de extends TranslationBundle {
 
   @override
   String get errorOccurred => r'Ein Fehler ist aufgetreten';
+
+  @override
+  String get alreadyHaveAnAccount => r'Melden Sie sich an, wenn Sie bereits ein Konto haben';
+
+  @override
+  String get createAnAccount => 'Erstellen Sie ein Konto, wenn Sie kein haben';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -380,7 +440,7 @@ Mit $providerName anmelden um fortzufarhen.''';
 }
 
 class _Bundle_pt extends TranslationBundle {
-  const _Bundle_pt() : super(null);
+  const _Bundle_pt();
 
   @override
   String get welcome => r'Bem-Vindo';
@@ -395,7 +455,7 @@ class _Bundle_pt extends TranslationBundle {
   String get passwordCheckLabel => r'Confirme a senha';
 
   @override
-  String get checkEmailLink => r'Check email for password reset link';
+  String get checkEmailLink => r'Verifique seu e-mail em busca de um link de redefinição de senha';
 
   @override
   String get passwordCheckError => r'As senhas são diferentes';
@@ -426,6 +486,13 @@ class _Bundle_pt extends TranslationBundle {
       r'Siga as instruções enviadas para esse e-mail para descobrir como redefinir sua senha';
 
   @override
+  String get checkEmailLinkSaved =>
+      r'Depois de salvar, verifique seu e-mail em busca de um link de redefinição de senha e faça login novamente';
+
+  @override
+  String get signUpLabel => r'Cadastrar';
+
+  @override
   String get sendButtonLabel => r'ENVIAR';
 
   @override
@@ -433,6 +500,12 @@ class _Bundle_pt extends TranslationBundle {
 
   @override
   String get errorOccurred => r'Ocorreu um erro';
+
+  @override
+  String get alreadyHaveAnAccount => r'Faça login se já tiver uma conta';
+
+  @override
+  String get createAnAccount => 'Crie uma conta se não tiver uma';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -462,10 +535,12 @@ Faça login com o $providerName para continuar.''';
 }
 
 class _Bundle_es extends TranslationBundle {
-  const _Bundle_es() : super(null);
+  const _Bundle_es();
 
   @override
   String get welcome => r'Bienvenido';
+  @override
+  String get signUpTitle => r'Registrar nuevo usuario';
   @override
   String get emailLabel => r'Email';
   @override
@@ -475,7 +550,7 @@ class _Bundle_es extends TranslationBundle {
   String get passwordCheckLabel => r'Confirma la contraseña';
 
   @override
-  String get checkEmailLink => r'Check email for password reset link';
+  String get checkEmailLink => r'Verifique su correo electrónico en busca de un vínculo para restablecer la contraseña';
 
   @override
   String get passwordCheckError => r'Las contraseñas no coinciden';
@@ -506,6 +581,13 @@ class _Bundle_es extends TranslationBundle {
       r'Sigue las instrucciones enviadas a este email para descubrir cómo reiniciar tu contraseña';
 
   @override
+  String get checkEmailLinkSaved =>
+      r'Después de guardar, revise su correo electrónico en busca de un vínculo para restablecer la contraseña e inicie sesión nuevamente';
+
+  @override
+  String get signUpLabel => r'Registrarse';
+
+  @override
   String get sendButtonLabel => r'ENVIAR';
 
   @override
@@ -513,6 +595,12 @@ class _Bundle_es extends TranslationBundle {
 
   @override
   String get errorOccurred => r'Occurió un error';
+
+  @override
+  String get alreadyHaveAnAccount => r'Inicia sesión si ya tienes una cuenta';
+
+  @override
+  String get createAnAccount => 'Crea una cuenta si no tienes una';
 
   @override
   allReadyEmailMessage(String email, String providerName) {
@@ -542,10 +630,12 @@ Entra con $providerName para continuar.''';
 }
 
 class _Bundle_ja extends TranslationBundle {
-  const _Bundle_ja() : super(null);
+  const _Bundle_ja();
 
   @override
   String get welcome => r'ようこそ';
+  @override
+  String get signUpTitle => r'新規登録';
   @override
   String get emailLabel => r'メールアドレス';
   @override
@@ -585,6 +675,12 @@ class _Bundle_ja extends TranslationBundle {
   String get recoverHelpLabel => r'このメールアドレスに、パスワードのリセット方法を説明した手順を送信します';
 
   @override
+  String get checkEmailLinkSaved => r'保存後、メールでパスワードリセットリンクを確認し、再度ログインしてください';
+
+  @override
+  String get signUpLabel => r'新規登録';
+
+  @override
   String get sendButtonLabel => r'送信';
 
   @override
@@ -592,6 +688,12 @@ class _Bundle_ja extends TranslationBundle {
 
   @override
   String get errorOccurred => r'エラーが発生しました';
+
+  @override
+  String get alreadyHaveAnAccount => r'すでにアカウントをお持ちの場合はサインインしてください';
+
+  @override
+  String get createAnAccount => r'アカウントをお持ちでない場合はアカウントを作成してください';
 
   @override
   allReadyEmailMessage(String email, String providerName) {

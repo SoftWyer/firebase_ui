@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui/password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,45 +18,39 @@ String _randomString(int length) {
 }
 
 class SignUpView extends StatefulWidget {
-  final String email;
-  final bool? passwordCheck;
-
-  const SignUpView(this.email, this.passwordCheck, {super.key});
+  const SignUpView({super.key});
 
   @override
   State<StatefulWidget> createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  TextEditingController? _controllerEmail;
-  TextEditingController? _controllerDisplayName;
-  // TextEditingController _controllerPassword;
-  // TextEditingController _controllerCheckPassword;
+  late final TextEditingController _controllerEmail;
+  late final TextEditingController _controllerDisplayName;
 
-  final FocusNode _focusPassword = FocusNode();
+  final _focusEmail = FocusNode();
 
   bool _valid = false;
 
   @override
   dispose() {
-    _focusPassword.dispose();
+    _focusEmail.dispose();
+    _controllerEmail.dispose();
+    _controllerDisplayName.dispose();
     super.dispose();
   }
 
   @override
   initState() {
     super.initState();
-    _controllerEmail = TextEditingController(text: widget.email);
+    _controllerEmail = TextEditingController();
     _controllerDisplayName = TextEditingController();
-    // _controllerPassword = TextEditingController();
-    // _controllerCheckPassword = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
-    _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(title: Text(FFULocalizations.of(context).signUpTitle!), elevation: 4.0),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signUpTitle), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
@@ -63,86 +58,53 @@ class _SignUpViewState extends State<SignUpView> {
               constraints: const BoxConstraints(maxWidth: 800),
               padding: const EdgeInsets.all(16.0),
               child: ListView(
-                children: <Widget>[
+                children: [
                   const SizedBox(height: 8.0),
-                  const Text('After saving, check your email for a password reset link and then log in again'),
+                  Text(FFULocalizations.of(context).checkEmailLinkSaved),
                   TextField(
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
+                    autofocus: true,
                     autocorrect: false,
-                    onSubmitted: _submit,
+                    onChanged: (_) => _checkValid(),
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                   ),
                   const SizedBox(height: 8.0),
                   TextField(
                     controller: _controllerDisplayName,
-                    autofocus: true,
                     keyboardType: TextInputType.text,
                     autocorrect: false,
-                    onChanged: _checkValid,
-                    onSubmitted: _submitDisplayName,
+                    onChanged: (_) => _checkValid(),
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).nameLabel),
                   ),
-                  const SizedBox(height: 8.0),
-                  // TextField(
-                  //   controller: _controllerPassword,
-                  //   obscureText: true,
-                  //   autocorrect: false,
-                  //   onSubmitted: _submit,
-                  //   focusNode: _focusPassword,
-                  //   decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
-                  // ),
-                  // !widget.passwordCheck
-                  //     ? Container()
-                  //     : TextField(
-                  //         controller: _controllerCheckPassword,
-                  //         obscureText: true,
-                  //         autocorrect: false,
-                  //         decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordCheckLabel),
-                  //       ),
                 ],
               ),
             ),
           );
         },
       ),
-      persistentFooterButtons: <Widget>[
-        OverflowBar(
-          alignment: MainAxisAlignment.center,
-          // mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextButton(
-              onPressed: _valid ? () => _connexion(context) : null,
-              child: Row(children: <Widget>[Text(FFULocalizations.of(context).saveLabel!)]),
-            ),
-          ],
-        ),
-      ],
+      bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            onPressed: _valid ? () => _connexion(context) : null,
+            child: Row(children: [Text(FFULocalizations.of(context).signUpLabel)]),
+          ),
+          const SizedBox(width: 16.0),
+        ],
+      ),
     );
   }
 
-  void _submitDisplayName(String submitted) {
-    FocusScope.of(context).requestFocus(_focusPassword);
-  }
-
-  void _submit(String submitted) {
-    _connexion(context);
-  }
-
   Future<void> _connexion(BuildContext context) async {
-    // if (widget.passwordCheck && _controllerPassword.text != _controllerCheckPassword.text) {
-    //   showErrorDialog(context, FFULocalizations.of(context).passwordCheckError);
-    //   return;
-    // }
+    String email = _controllerEmail.text;
 
-    String email = _controllerEmail!.text;
-
-    FirebaseAuth auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(email: email, password: _randomString(16));
-      User user = authResult.user!;
+      final authResult = await auth.createUserWithEmailAndPassword(email: email, password: _randomString(16));
+      final user = authResult.user!;
       try {
-        await user.updateDisplayName(_controllerDisplayName!.text);
+        await user.updateDisplayName(_controllerDisplayName.text);
 
         auth.sendPasswordResetEmail(email: email);
 
@@ -150,25 +112,42 @@ class _SignUpViewState extends State<SignUpView> {
 
         if (context.mounted) {
           Navigator.pop(context, true);
+          Navigator.of(context).push(
+            MaterialPageRoute<bool>(
+              builder: (BuildContext context) {
+                return PasswordView(email: email);
+              },
+            ),
+          );
         }
       } catch (e) {
         String msg = 'An error occurred: $e';
         print(msg);
-        // showErrorDialog(context, msg);
       }
     } on PlatformException catch (e) {
       print(e);
-      //TODO improve errors catching
       if (context.mounted) {
         String? msg = e.message;
+        showErrorDialog(context, msg);
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      if (context.mounted) {
+        String? msg = e.message;
+        showErrorDialog(context, msg);
+      }
+    } catch (e) {
+      print(e);
+      if (context.mounted) {
+        String msg = 'An error occurred: $e';
         showErrorDialog(context, msg);
       }
     }
   }
 
-  void _checkValid(String value) {
+  void _checkValid() {
     setState(() {
-      _valid = _controllerDisplayName!.text.isNotEmpty;
+      _valid = _controllerDisplayName.text.isNotEmpty && _controllerEmail.text.isNotEmpty;
     });
   }
 }

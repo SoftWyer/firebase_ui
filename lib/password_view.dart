@@ -6,17 +6,17 @@ import 'trouble_signin.dart';
 import 'utils.dart';
 
 class PasswordView extends StatefulWidget {
-  final String email;
+  const PasswordView({this.email, super.key});
 
-  const PasswordView(this.email, {super.key});
+  final String? email;
 
   @override
   State<StatefulWidget> createState() => _PasswordViewState();
 }
 
 class _PasswordViewState extends State<PasswordView> {
-  TextEditingController? _controllerEmail;
-  TextEditingController? _controllerPassword;
+  late final TextEditingController _controllerEmail;
+  late final TextEditingController _controllerPassword;
 
   @override
   initState() {
@@ -26,10 +26,16 @@ class _PasswordViewState extends State<PasswordView> {
   }
 
   @override
+  void dispose() {
+    _controllerEmail.dispose();
+    _controllerPassword.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _controllerEmail!.text = widget.email;
     return Scaffold(
-      appBar: AppBar(title: Text(FFULocalizations.of(context).signInTitle!), elevation: 4.0),
+      appBar: AppBar(title: Text(FFULocalizations.of(context).signInTitle), elevation: 4.0),
       body: Builder(
         builder: (BuildContext context) {
           return Center(
@@ -37,32 +43,25 @@ class _PasswordViewState extends State<PasswordView> {
               constraints: const BoxConstraints(maxWidth: 800),
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                children: <Widget>[
+                children: [
                   TextField(
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
+                    autofocus: true,
                     autocorrect: false,
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).emailLabel),
                   ),
-                  //const SizedBox(height: 5.0),
                   TextField(
                     controller: _controllerPassword,
-                    autofocus: true,
                     onSubmitted: _submit,
                     obscureText: true,
                     autocorrect: false,
                     decoration: InputDecoration(labelText: FFULocalizations.of(context).passwordLabel),
                   ),
                   const SizedBox(height: 16.0),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: InkWell(
-                      onTap: _handleLostPassword,
-                      child: Text(
-                        FFULocalizations.of(context).troubleSigningInLabel!,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
+                  TextButton(
+                    onPressed: _handleLostPassword,
+                    child: Text(FFULocalizations.of(context).troubleSigningInLabel),
                   ),
                 ],
               ),
@@ -70,18 +69,17 @@ class _PasswordViewState extends State<PasswordView> {
           );
         },
       ),
-      persistentFooterButtons: <Widget>[
-        OverflowBar(
-          alignment: MainAxisAlignment.center,
-          // mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextButton(
-              onPressed: () => _connexion(context),
-              child: Row(children: <Widget>[Text(FFULocalizations.of(context).signInLabel!)]),
-            ),
-          ],
-        ),
-      ],
+      resizeToAvoidBottomInset: true,
+      bottomSheet: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            onPressed: () => _connexion(context),
+            child: Row(children: [Text(FFULocalizations.of(context).signInLabel)]),
+          ),
+          const SizedBox(width: 16.0),
+        ],
+      ),
     );
   }
 
@@ -93,25 +91,24 @@ class _PasswordViewState extends State<PasswordView> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          return TroubleSignIn(_controllerEmail!.text);
+          return TroubleSignIn(_controllerEmail.text);
         },
       ),
     );
   }
 
   Future<void> _connexion(BuildContext context) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     UserCredential authResult;
     User? user;
     try {
       authResult = await auth.signInWithEmailAndPassword(
-        email: _controllerEmail!.text,
-        password: _controllerPassword!.text,
+        email: _controllerEmail.text,
+        password: _controllerPassword.text,
       );
       user = authResult.user;
       print(user);
     } catch (exception) {
-      //TODO improve errors catching
       if (context.mounted) {
         String? msg = FFULocalizations.of(context).passwordInvalidMessage;
         showErrorDialog(context, msg);

@@ -12,48 +12,56 @@ class FFULocalizations {
     _translationBundle = translationBundleForLocale(locale);
   }
 
-  String? get welcome => _translationBundle.welcome;
+  String get welcome => _translationBundle.welcome;
 
-  String? get signUpTitle => _translationBundle.signUpTitle;
+  String get signUpTitle => _translationBundle.signUpTitle;
 
-  String? get emailLabel => _translationBundle.emailLabel;
+  String get emailLabel => _translationBundle.emailLabel;
 
-  String? get nextButtonLabel => _translationBundle.nextButtonLabel;
+  String get nextButtonLabel => _translationBundle.nextButtonLabel;
 
-  String? get cancelButtonLabel => _translationBundle.cancelButtonLabel;
+  String get cancelButtonLabel => _translationBundle.cancelButtonLabel;
 
-  String? get passwordLabel => _translationBundle.passwordLabel;
-  String? get passwordCheckLabel => _translationBundle.passwordCheckLabel;
-  String? get passwordCheckError => _translationBundle.passwordCheckError;
+  String get passwordLabel => _translationBundle.passwordLabel;
+  String get passwordCheckLabel => _translationBundle.passwordCheckLabel;
+  String get passwordCheckError => _translationBundle.passwordCheckError;
 
-  String? get troubleSigningInLabel => _translationBundle.troubleSigningInLabel;
+  String get troubleSigningInLabel => _translationBundle.troubleSigningInLabel;
 
-  String? get signInLabel => _translationBundle.signInLabel;
+  String get signInLabel => _translationBundle.signInLabel;
 
-  String? get signInTitle => _translationBundle.signInTitle;
+  String get signInTitle => _translationBundle.signInTitle;
 
-  String? get passwordInvalidMessage => _translationBundle.passwordInvalidMessage;
+  String get passwordInvalidMessage => _translationBundle.passwordInvalidMessage;
 
-  String? get checkEmailLink => _translationBundle.checkEmailLink;
+  String get checkEmailLink => _translationBundle.checkEmailLink;
 
-  String? get recoverPasswordTitle => _translationBundle.recoverPasswordTitle;
+  String get recoverPasswordTitle => _translationBundle.recoverPasswordTitle;
 
-  String? get recoverHelpLabel => _translationBundle.recoverHelpLabel;
+  String get recoverHelpLabel => _translationBundle.recoverHelpLabel;
 
-  String? get sendButtonLabel => _translationBundle.sendButtonLabel;
+  String get sendButtonLabel => _translationBundle.sendButtonLabel;
 
-  String? get nameLabel => _translationBundle.nameLabel;
+  String get nameLabel => _translationBundle.nameLabel;
 
-  String? get saveLabel => _translationBundle.saveLabel;
+  String get saveLabel => _translationBundle.saveLabel;
 
-  String? get passwordLengthMessage => _translationBundle.passwordLengthMessage;
+  String get passwordLengthMessage => _translationBundle.passwordLengthMessage;
 
-  String? get signInGoogle => _translationBundle.signInGoogle;
-  String? get signInApple => _translationBundle.signInApple;
-  String? get signInEmail => _translationBundle.signInEmail;
-  String? get signInGuest => _translationBundle.signInGuest;
+  String get signInGoogle => _translationBundle.signInGoogle;
+  String get signInApple => _translationBundle.signInApple;
+  String get signInEmail => _translationBundle.signInEmail;
+  String get signInGuest => _translationBundle.signInGuest;
 
-  String? get errorOccurred => _translationBundle.errorOccurred;
+  String get errorOccurred => _translationBundle.errorOccurred;
+
+  String get signUpLabel => _translationBundle.signUpLabel;
+
+  String get checkEmailLinkSaved => _translationBundle.checkEmailLinkSaved;
+
+  String get alreadyHaveAnAccount => _translationBundle.alreadyHaveAnAccount;
+
+  String get createAnAccount => _translationBundle.createAnAccount;
 
   static Future<FFULocalizations> load(Locale locale) {
     return SynchronousFuture<FFULocalizations>(FFULocalizations(locale));
