@@ -12,20 +12,21 @@ export 'config.dart';
 export 'utils.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen(
-      {super.key,
-      this.title,
-      this.header,
-      this.footer,
-      this.signUpPasswordCheck,
-      this.providers,
-      this.color = Colors.white,
-      this.allowBackAction = true,
-      this.config,
-      required this.showBar,
-      required this.avoidBottomInset,
-      required this.bottomPadding,
-      required this.horizontalPadding});
+  const SignInScreen({
+    super.key,
+    this.title,
+    this.header,
+    this.footer,
+    this.signUpPasswordCheck,
+    this.providers,
+    this.color = Colors.white,
+    this.allowBackAction = true,
+    this.config,
+    required this.showBar,
+    required this.avoidBottomInset,
+    required this.bottomPadding,
+    required this.horizontalPadding,
+  });
 
   final String? title;
   final Widget? header;
@@ -47,7 +48,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  static final deviceInfoPlugin = DeviceInfoPlugin();
   Widget get _header => widget.header ?? const SizedBox.shrink();
   Widget get _footer => widget.footer ?? const SizedBox.shrink();
 
@@ -77,50 +78,48 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-        canPop: widget.allowBackAction,
-        child: Scaffold(
-            appBar: widget.showBar
-                ? AppBar(
-                    title: Text(widget.title!),
-                    elevation: 4.0,
-                    automaticallyImplyLeading: widget.allowBackAction,
-                  )
-                : null,
-            resizeToAvoidBottomInset: widget.avoidBottomInset,
-            body: Builder(
-              builder: (context) {
-                return Container(
-                  decoration: BoxDecoration(color: widget.color),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _header,
-                        Expanded(
-                          child: Container(
-                            constraints: const BoxConstraints(maxWidth: 300),
-                            padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-                            child: FutureBuilder<List<ProvidersTypes>>(
-                                future: _providers(),
-                                initialData: const [],
-                                builder: (context, snapshot) {
-                                  print('SignIn Snapshot is $snapshot');
-                                  return LoginView(
-                                    providers: snapshot.data,
-                                    passwordCheck: _passwordCheck,
-                                    bottomPadding: widget.bottomPadding,
-                                    config: widget.config,
-                                  );
-                                }),
-                          ),
-                        ),
-                        _footer,
-                      ],
+    canPop: widget.allowBackAction,
+    child: Scaffold(
+      appBar: widget.showBar
+          ? AppBar(title: Text(widget.title!), elevation: 4.0, automaticallyImplyLeading: widget.allowBackAction)
+          : null,
+      resizeToAvoidBottomInset: widget.avoidBottomInset,
+      body: Builder(
+        builder: (context) {
+          return Container(
+            decoration: BoxDecoration(color: widget.color),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _header,
+                  Expanded(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+                      child: FutureBuilder<List<ProvidersTypes>>(
+                        future: _providers(),
+                        initialData: const [],
+                        builder: (context, snapshot) {
+                          print('SignIn Snapshot is $snapshot');
+                          return LoginView(
+                            providers: snapshot.data,
+                            passwordCheck: _passwordCheck,
+                            bottomPadding: widget.bottomPadding,
+                            config: widget.config,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                );
-              },
-            )),
-      );
+                  _footer,
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    ),
+  );
 }

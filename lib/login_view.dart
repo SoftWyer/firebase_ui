@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -34,7 +35,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
 
   late Map<ProvidersTypes, ButtonDescription> _buttons;
 
@@ -42,7 +43,61 @@ class _LoginViewState extends State<LoginView> {
   User? _user;
 
   // Google Sign-In 7.x requires using the singleton instance
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final _googleSignIn = kIsWeb ? null : GoogleSignIn.instance;
+
+  StreamSubscription<GoogleSignInAuthenticationEvent>? _authSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (_googleSignIn != null) {
+      // 1. Start listening to events immediately on boot
+      _authSubscription = _googleSignIn.authenticationEvents.listen((event) async {
+        if (!mounted) return;
+
+        final user = switch (event) {
+          GoogleSignInAuthenticationEventSignIn() => event.user,
+          GoogleSignInAuthenticationEventSignOut() => null,
+        };
+
+        if (user != null) {
+          await _authenticateWithFirebase(user);
+        }
+
+        // 2. Trigger silent sign-in for returning users
+        _googleSignIn.attemptLightweightAuthentication();
+      });
+    }
+  }
+
+  Future<void> _authenticateWithFirebase(GoogleSignInAccount user) async {
+    _signingIn(true);
+    try {
+      final auth = user.authentication;
+      AuthCredential credential = GoogleAuthProvider.credential(idToken: auth.idToken);
+      UserCredential authResult = await _auth.signInWithCredential(credential);
+
+      _user = authResult.user;
+      print('Firebase Success: ${authResult.user}');
+
+      print('Success! Verified Payload Caught via Stream:');
+      print('User Email: ${user.email}');
+      print('ID Token JWT: ${auth.idToken}');
+    } catch (e) {
+      if (mounted) {
+        showErrorDialog(context, e.toString());
+      }
+    } finally {
+      _signingIn(false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
 
   Future<void> _handleEmailSignIn() async {
     _signingIn(true);
@@ -79,6 +134,10 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<void> _handleGoogleSignIn() async {
+    if (_googleSignIn == null) {
+      return;
+    }
+
     _signingIn(true);
     try {
       // Initialize Google Sign-In (required for 7.x)
@@ -125,6 +184,21 @@ class _LoginViewState extends State<LoginView> {
         showErrorDialog(context, e.toString());
       }
     } finally {
+      _signingIn(false);
+    }
+  }
+
+  Future<void> _handleWebSignInWasm() async {
+    _signingIn(true);
+    try {
+      final provider = GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+      provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+
+      // This will navigate the browser away from your app to Google
+      await FirebaseAuth.instance.signInWithRedirect(provider);
+    } catch (e) {
+      if (mounted) showErrorDialog(context, e.toString());
       _signingIn(false);
     }
   }
@@ -253,7 +327,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     _buttons = {
       ProvidersTypes.google: providersDefinitions(context)[ProvidersTypes.google]!.copyWith(
-        onSelected: _isSigningIn ? null : _handleGoogleSignIn,
+        onSelected: _isSigningIn ? null : (kIsWeb ? _handleWebSignInWasm : _handleGoogleSignIn),
         labelColor: Colors.black,
       ),
       if (!kIsWeb)

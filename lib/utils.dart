@@ -9,8 +9,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 enum ProvidersTypes { email, google, apple, guest, phone }
 
-final googleSignIn = GoogleSignIn.instance;
-
 ProvidersTypes? stringToProvidersType(String value) {
   if (value.toLowerCase().contains('google')) return ProvidersTypes.google;
   if (value.toLowerCase().contains('apple')) return ProvidersTypes.apple;
@@ -147,7 +145,7 @@ Future<dynamic> signOut(Iterable providers) async {
   return Future.forEach(providers, (dynamic p) async {
     switch (p.providerId) {
       case 'google.com':
-        await googleSignIn.signOut();
+        await GoogleSignIn.instance.signOut();
         break;
     }
   });
@@ -156,7 +154,7 @@ Future<dynamic> signOut(Iterable providers) async {
 ///
 /// Class to generate a random Nonce of arbitrary length
 class Nonce {
-  static final Random _random = Random.secure();
+  static final _random = Random.secure();
 
   static List<int> createCryptoRandomInt([int length = 32]) => List<int>.generate(length, (i) => _random.nextInt(256));
 
