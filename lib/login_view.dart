@@ -195,6 +195,9 @@ class _LoginViewState extends State<LoginView> {
       provider.addScope('https://www.googleapis.com/auth/userinfo.email');
       provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
 
+      // Force Google to show the account selection screen every time
+      provider.setCustomParameters({'prompt': 'select_account'});
+
       // This will navigate the browser away from your app to Google
       await FirebaseAuth.instance.signInWithRedirect(provider);
     } catch (e) {
