@@ -64,10 +64,10 @@ class _LoginViewState extends State<LoginView> {
         if (user != null) {
           await _authenticateWithFirebase(user);
         }
-
-        // 2. Trigger silent sign-in for returning users
-        _googleSignIn.attemptLightweightAuthentication();
       });
+
+      // 2. Trigger silent sign-in for returning users
+      // _googleSignIn.attemptLightweightAuthentication();
     }
   }
 
