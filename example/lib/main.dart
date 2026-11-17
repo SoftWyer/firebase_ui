@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui/flutter_firebase_ui.dart';
 import 'package:firebase_ui/l10n/localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart' hide GlobalMaterialLocalizations;
+import 'package:material_ui/material_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      localizationsDelegates: const [
+      theme: ThemeData(primarySwatch: Colors.blue),
+      localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         FFULocalizations.delegate,
@@ -79,26 +77,18 @@ class _MyHomePageState extends State<MyHomePage> {
             'signinwithapple',
             'callbacks/signin',
             'com.about.you',
-          )
+          ),
         },
         title: 'Demo',
         header: const Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 32.0),
-            child: Text('Demo'),
-          ),
+          child: Padding(padding: EdgeInsets.symmetric(vertical: 32.0), child: Text('Demo')),
         ),
         showBar: true,
         horizontalPadding: 8,
         bottomPadding: 5,
         avoidBottomInset: true,
         color: const Color(0x33363636),
-        providers: const [
-          ProvidersTypes.google,
-          ProvidersTypes.apple,
-          ProvidersTypes.email,
-          ProvidersTypes.guest,
-        ],
+        providers: const [ProvidersTypes.google, ProvidersTypes.apple, ProvidersTypes.email, ProvidersTypes.guest],
       );
     } else {
       return HomeScreen(user: _currentUser);
@@ -124,33 +114,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Bienvenue'),
-        elevation: 4.0,
+    appBar: AppBar(title: const Text('Bienvenue'), elevation: 4.0),
+    body: Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: const BoxDecoration(color: Colors.amber),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('Welcome,')]),
+          const SizedBox(height: 8.0),
+          Text(user!.displayName ?? user!.email!),
+          const SizedBox(height: 32.0),
+          ElevatedButton(onPressed: _logout, child: const Text('DECONNEXION')),
+        ],
       ),
-      body: Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: const BoxDecoration(color: Colors.amber),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Welcome,'),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Text(user!.displayName ?? user!.email!),
-              const SizedBox(
-                height: 32.0,
-              ),
-              ElevatedButton(onPressed: _logout, child: const Text('DECONNEXION'))
-            ],
-          )));
+    ),
+  );
 
   void _logout() {
     signOutProviders();

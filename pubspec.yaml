@@ -4,7 +4,7 @@ version: 2.0.0
 homepage: https://github.com/SoftWyer/firebase_ui
 
 environment:
-  sdk: '>=3.11.4 <4.0.0'
+  sdk: '>=3.14.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -20,6 +20,7 @@ dependencies:
   sn_progress_dialog: ^2.0.0
   sign_in_with_apple: ^8.2.0
 
+  material_ui: ^1.11.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

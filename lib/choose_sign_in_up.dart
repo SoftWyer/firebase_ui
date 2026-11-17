@@ -1,5 +1,5 @@
 import 'package:firebase_ui/sign_up_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'l10n/localization.dart';
 import 'password_view.dart';
